@@ -1,5 +1,28 @@
 # Requirements
-List info required to answer questions
+
+Traffic data:
+-Traffic on routes
+-Travel time
+-Rush hour delays
+
+
+Public transit data: 
+-Buses and Link routes
+-Buses and Link stops location
+-Fares
+
+Passengers trips data:
+-Origins and destinations of the trips
+-Mode of trip
+-Purpose of trip
+-Time of trip
+
+Passengers socioeconomic data:
+-Income
+-Education
+-Number of family members
+-Home neighborhood
+-Ethnicity
 
 # Sources
 List all data sets we are planning to use:
