@@ -50,8 +50,7 @@ Analyze data choices
 
 | Requirements\Data    | Census Tracked Data | Stackoverflow | Gerneral Public Data |
 |:--------------------:|:-------------------:|:-------------:|:--------------------:|
-| Traffic Data         | efefefefefefefefefef|               |                      | 
-|                      |                     |               |                      |
-| Public transit data  |                     |               |                      |
-| Passengers trip data |                     |               |                      |
-| Socioeconmic         |                     |               |                      |
+| Traffic Data         | Provide general traffic data | Provide mapping | Provide connection between general public and traaffic | 
+| Public transit data  | This public transit data contains public transit data | Provide mapping | Provide connetion of how general public use public transit |
+| Passengers trip data | Provide the route/time of a passenger | Provide maping |Provide coneection between general public and passenger trip data |
+| Socioeconmic         | Provide socioeconomic data | Provide mapping | Provide connection between general public and socioeconmic behavior |
