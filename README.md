@@ -1,20 +1,24 @@
-# Project Repository
+# Improving Public Transportation
 
-This homework is done as a group. You will be creating your team repository.
+Our group is primarily concerned with the issues of transportation in the city
+of Seattle. With the city growing at an alarming rate, there are inevitably
+more and more people on the roads traveling each day. We look at the Puget
+Sound Regional Council's Travel Survey results from 2014 to understand the
+travel modes and trends of Seattle residents. Data can be found here:
+https://www.psrc.org/household-travel-survey-program
 
-You should do the following:
-- Create a repository for your team with a license and a .gitignore file.
-- Construct an initial README file that describes the problem you are addressing (but not necessarily how you will address it). Include at least one image and a link to another web page.
-- Create a Docs folder, and in that folder create a file named data.md. The document should have the following sections:
-  - Requirements. List the kind of information required to answer the questions described in the README file.
-  - Sources. List the data sets that you are considering using, their content, and their availability.
-  - Evaluation. The core part of this section is a table that analyzes the choice of data. The columns of the table are data sets described in the "Data" section. The rows are requirements of the data based on the questions you want to answer. You should complete the cells in the table.
-  
-Each person in the team should make at least one commit to the repository.
+The insights from the PSRC Travel Survey will be cross-referenced with Seattle
+public transit data to understand how well the current systems accommodate the
+needs of Seattle residents. A similar map to Figure 1 of King County transit
+routes will be overlaid with 'hot-spots' of travel destinations from the PSRC
+data.
 
-Rubric. Items 1-4 are group grades. Item 5 is an individual grade.
-1. Created repository with all team members as collaborators, and README file describes the questions addressed by the project. (1 pt)
-2. data.md has a Requirements section with appropriate content. (1 pt)
-3. data.md has a Sources section with appropriate content. (1 pt)
-4. data.md has a Evaluation section with appropriate content. (1 pt)
-5. You made a commit to the repository. (1 pt)
+![Image](http://metro.kingcounty.gov/maps/system/images/metro_system_map_nw_area.jpg?raw=true)
+Figure 1.
+
+Once we better understand how well the current public transportation system
+aligns with the needs of the city, we can then make suggestions as to how it
+might be improved. This could involve additional bus lines being added, new
+link stations erected in the future, etc. Just as well, we are interested in
+how socioeconomic status determines modes and trends of transportation
+throughout Seattle.
