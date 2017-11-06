@@ -3,9 +3,9 @@ How well does Seattle public transit meet the needs of Seattle residents?
 
 # User Profile
 * User computational environments:
-... insert here
-* Boundary of User Interface:
-... insert here
+- insert here
+* User's knowledge of the problem statement:
+- insert here
 
 # Elements of Problem Statement
 
