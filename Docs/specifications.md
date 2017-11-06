@@ -1,11 +1,11 @@
 # Problem Statement
 How well does Seattle public transit meet the needs of Seattle residents?
 
-
 # User Profile
 * User computational environments:
-** What the user knows: visual mapping, what transit he/she is interested in using 
-* What the user doesn't know: current transit status, ...
+...* insert here
+* Boundary of User Interface:
+...* insert here
 
 # Elements of Problem Statement
 
