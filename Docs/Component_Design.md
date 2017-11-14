@@ -25,18 +25,25 @@
          group all lat and long data into a dataframe that is the output
 
 
-  - b
+  - Database of socioeconomic and trips by location
     - What it does
-      - insert here
+        - This component is a database of the information on households and individuals characterestics and their trips diary. We use this data to present socioeconomic information (e.g. average income, age, education, etc) and trip frequency for a zone, selected by the user.
     - Name
-      - insert here
+        - psrc_data.py which is a Python script to clean and aggregate data for all the census tracts in King County.
     - Inputs
-      - insert here
+        - Census tract IDs in King County, which will be used to aggregate the data based on it.
     - Outputs
-      - insert here
+        - The output of this component is two dataframe of aggregated socioeconomic characteristics of travellers in each census tract, and their trip destinations.
     - Pseudo code
-      - insert here
-
+	    - get_psrc_data(census_track_id)
+		  using census_tract_id to find all the people starting a trip in that tract
+		  aggregate socioeconomic data on trip_origin equal to census_tract_id
+		  aggregate trip_destinations based on trip_origin equal to census_tract_id
+          output a dataframe of aggregate data and 		  
+		  
+		  
+	
+	
   - Map of routes and stops
     - What it does
       - This component will be used to visualize current transit trend data in King
@@ -62,13 +69,17 @@
 
   - Visualization of the socioeconomic data through graph and heatmap
     - What it does
-      - Visualization of the socioeconomic data through graph and heatmap. The user will be able to easily view the socioeconomic behavior by regions
+      - Visualization of the socioeconomic data through graph and heatmap.
+      The user will be able to easily view the socioeconomic behavior by regions
     - Name
       - SocioVis.py
     - Inputs
-      - The user will either click on the region or type in the zipcode. 
+      - The user will either click on the region or type in the zipcode.
     - Outputs
-      - Once a region is clicked, a small table/box will appear next to the region with the socioeconomic information. The outputs will include household income, age, marriage status, highest education, number of family members, employment status, etc
+      - Once a region is clicked, a small table/box will appear next to the region
+      with the socioeconomic information. The outputs will include household income,
+      age, marriage status, highest education, number of family members, employment status, etc
     - How it works
-      - The map of the Kings county will be divided into regions and the user can click on the regions that will pop up a table/box of socioeconomic behaviors. 
+      - The map of the Kings county will be divided into regions and the user can
+      click on the regions that will pop up a table/box of socioeconomic behaviors.
       - Group the socioeconomic behavior by regions
