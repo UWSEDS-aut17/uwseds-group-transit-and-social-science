@@ -24,14 +24,7 @@ Can Seattle public transit be improved to better meet the needs of Seattle resid
 * Are there transit stations that have not been used in recent years that can be removed to optimize route & time?
 
 # Use Cases
-<<<<<<< HEAD
-* First
-    - 
-* Second
-    -
-* Third
-    -
-=======
+
 * Point-and-Click interactive map on a webpage
     - User clicks on a zip code location
     - Software groups the data associated with that region
@@ -43,4 +36,4 @@ Can Seattle public transit be improved to better meet the needs of Seattle resid
 * Report Summary
     - A file will be created with the results of the analysis
       - This will include datasets, maps, and plots in a reader-friendly format
->>>>>>> c53b12647d7e79639a52dc3ea2b460782468c75c
+
