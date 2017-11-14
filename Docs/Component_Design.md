@@ -57,13 +57,17 @@
 
   - Visualization of the socioeconomic data through graph and heatmap
     - What it does
-      - Visualization of the socioeconomic data through graph and heatmap. The user will be able to easily view the socioeconomic behavior by regions
+      - Visualization of the socioeconomic data through graph and heatmap.
+      The user will be able to easily view the socioeconomic behavior by regions
     - Name
       - SocioVis.py
     - Inputs
-      - The user will either click on the region or type in the zipcode. 
+      - The user will either click on the region or type in the zipcode.
     - Outputs
-      - Once a region is clicked, a small table/box will appear next to the region with the socioeconomic information. The outputs will include household income, age, marriage status, highest education, number of family members, employment status, etc
+      - Once a region is clicked, a small table/box will appear next to the region
+      with the socioeconomic information. The outputs will include household income,
+      age, marriage status, highest education, number of family members, employment status, etc
     - How it works
-      - The map of the Kings county will be divided into regions and the user can click on the regions that will pop up a table/box of socioeconomic behaviors. 
+      - The map of the Kings county will be divided into regions and the user can
+      click on the regions that will pop up a table/box of socioeconomic behaviors.
       - Group the socioeconomic behavior by regions
