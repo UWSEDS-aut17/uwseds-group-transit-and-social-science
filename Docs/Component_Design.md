@@ -9,15 +9,16 @@
 * Component specifications
   - a
     - What it does
-      - 
+       - gdfg
     - Name
-      -
+       -
     - Inputs
-      - 
+       - 
     - Outputs
-      -
+       -
     - Pseudo code
-      -
+       -
+
 
   - b
     - What it does
