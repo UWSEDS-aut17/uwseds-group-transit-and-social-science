@@ -8,11 +8,11 @@
 * Component specifications
   - a
      - What it does
-	-
+	  - dsf
      - Name
-	-
+	  -
      - Inputs
-	-
+          - 
      - Outputs
 	-
      - Pseudo code
@@ -20,7 +20,7 @@
 
   - b
      - What it does
-	-
+	   
      - Name
 	-
      - Inputs
