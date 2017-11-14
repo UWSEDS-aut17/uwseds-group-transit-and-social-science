@@ -7,17 +7,22 @@
   - Visualization of socioeconomic data through graph and heatmap
 
 * Component specifications
-  - a
+  - Database of public transportation routes and stops by location
     - What it does
-       - insert here
+       - Takes a location from the map and creates dataframes that contains what buses routes and stops
+         are closest and the path of the bus route
     - Name
-       - insert here
+       - gtfs_utils.py
     - Inputs
-       - insert here
+       - Census tracked location as specified by click on map
     - Outputs
-       - insert here
+       - Dataframes of bus route paths, stop locations and information about bus stop frequency
     - Pseudo code
-       - insert here
+       - get_busdata(census_track_id)
+         using latitutde and longitude data, find bus route ids within that census track
+         use bus route ids to determine stop locations (lat, long)
+         use bus route ids to determine bus route path (lat, long)
+         group all lat and long data into a dataframe that is the output
 
 
   - b
