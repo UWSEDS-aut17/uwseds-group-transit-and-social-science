@@ -7,8 +7,8 @@
   - d
 * Component specifications
   - a
-     - What it does
-	  - dsf
+    - What it does
+      - dsf
      - Name
 	  -
      - Inputs
