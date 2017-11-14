@@ -25,6 +25,37 @@ merge_data ():
 
 #   Drop not needed columns
 drop_columns ():
+    df = all_df[['recordID','hhid_x','personID','tripID','ocity','ozip','dcity','dzip', 'time_start_mam',
+ 'time_start_hhmm',
+ 'time_start_past',
+ 'time_end_mam',
+ 'time_end_hhmm',
+ 'time_end_past',
+ 'trip_dur_reported',
+ 'gdist',
+ 'gtime', 'o_purpose',
+ 'd_purpose', 'transitsystem1',
+ 'transitsystem2',
+ 'transitsystem3',
+ 'transitsystem4',
+ 'transitline1',
+ 'transitline2',
+ 'transitline3',
+ 'transitline4', 'triptype', 'hhsize',
+ 'numadults',
+ 'numworkers',
+ 'lifecycle',
+ 'hh_income_detailed', 'h_city',
+ 'h_zip', 'age',
+ 'relationship',
+ 'gender',
+ 'employment',
+ 'worker',
+ 'student',
+ 'education',
+ 'smartphone',
+ 'transit_freq'
+ ]]
     
 
 
