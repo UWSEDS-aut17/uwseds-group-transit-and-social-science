@@ -32,17 +32,28 @@
     - Pseudo code
       - insert here
 
-  - c
+  - Map of routes and stops
     - What it does
-      - insert here
+      - This component will be used to visualize current transit trend data in King
+      County so that it can be compared with PSRC survey data.
+      It will serve as the base metric for all of our analysis by understanding what
+      areas are over-or-underserved with the current implementations.
     - Name
-      - insert here
+      - gtfs_utils.py
     - Inputs
-      - insert here
+      - OneBusAway DataFrames for stops, trips, shapes, and routes. Columns involve
+      specific IDs that relate to that specific DF, and also correlate to the other
+      DFs for reference.
+      - Map with zip code outlines for visualization.
     - Outputs
-      - insert here
-    - Pseudo code
-      - insert here
+      - An interactive map that will be updated based on the inputs from the user.
+    - How it works
+      - Get all route, stop, trip, and shape data from the OneBusAway DataFrames.
+      - Create a map with zip code differentiation that can be used to overlay the
+      bus data.
+      - Add the OneBusAway data and group by the location of interest
+      - With grouping in pandas we should be able to interactively update the map
+      based on the user inputs.
 
   - d
     - What it does
@@ -55,4 +66,3 @@
       - insert here
     - Pseudo code
       - insert here
-
