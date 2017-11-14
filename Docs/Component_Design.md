@@ -31,7 +31,7 @@
     - Name
         - psrc_data.py which is a Python script to clean and aggregate data for all the census tracts in King County.
     - Inputs
-        - Census tract IDs in King County, which will be used to aggregate the date based on it.
+        - Census tract IDs in King County, which will be used to aggregate the data based on it.
     - Outputs
         - The output of this component is two dataframe of aggregated socioeconomic characteristics of travellers in each census tract, and their trip destinations.
     - Pseudo code
