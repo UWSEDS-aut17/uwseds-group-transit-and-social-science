@@ -1,10 +1,10 @@
 # Component Design
 
 * Component list
-  - a
-  - b
-  - c
-  - d
+  - Database of public transportation routes and stops by location
+  - Database of socioeconomic and trips by location
+  - Map of routes and stops
+  - Visualization of socioeconomic data through graph and heatmap
 
 * Component specifications
   - a
