@@ -4,7 +4,7 @@ Example of bus route graph
 import geoplotlib
 from geoplotlib.utils import read_csv
 
-data = read_csv('./data/testroute_1.csv')
+data = read_csv('./data/testroute_line.csv')
 geoplotlib.graph(data,
                  src_lat='x',
                  src_lon='y',
