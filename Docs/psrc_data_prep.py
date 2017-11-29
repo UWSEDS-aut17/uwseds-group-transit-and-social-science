@@ -1,14 +1,14 @@
-#    Python script to process King County GTFS data 
+#    Python script to process King County GTFS data
 import pandas as pd
 import os
 import zipfile
 
-#    Reading data and making pandas dataframes 
+#    Reading data and making pandas dataframes
 #    from PSRC xlsx files
 def get_data ():
-    households_df = pd.read_excel('C:/Users/ASUS/Desktop/uwsed/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-households.xlsx')
-    persons_df = pd.read_excel('C:/Users/ASUS/Desktop/uwsed/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-persons.xlsx')
-    trips_df = pd.read_excel('C:/Users/ASUS/Desktop/uwsed/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-trips.xlsx')
+    households_df = pd.read_excel('C:/Users/Dylan Shea/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-households.xlsx')
+    persons_df = pd.read_excel('C:/Users/Dylan Shea/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-persons.xlsx')
+    trips_df = pd.read_excel('C:/Users/Dylan Shea/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-trips.xlsx')
 
 #   Extract trips with origin and destination in King County
 def extract_trips ():
@@ -56,6 +56,4 @@ def drop_columns ():
  'smartphone',
  'transit_freq'
  ]]
-    
-
-
+    return(df)
