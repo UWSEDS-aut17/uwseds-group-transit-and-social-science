@@ -99,17 +99,17 @@ def make_useful():
     #and home zips. Visualization will then be specific for each
     for i in len(df['tripID']):
         #Should we group these by hour traveled maybe?? To compare to buses
-        if df['ozip'][i] == df['h_zip'][i] and df['dzip'][i] == df['h_zip'][i]:
+        if df.loc['ozip',i] == df.loc['h_zip',i] and df.loc['dzip',i] == df.loc['h_zip',i]:
             #These are presumably short trips, no bus needed
-            p.circle(df['ozip'][i], df['dzip'][i], fill_color="blue", size=8)
-        elif df['ozip'][i] == df['h_zip'][i]:
+            p.circle(df.loc['ozip',i], df.loc['dzip',i], fill_color="blue", size=8)
+        elif df.loc['ozip',i] == df.loc['h_zip',i]:
             #These refer to how well served their home zip is for trips out
-            p.circle(df['ozip'][i], df['dzip'][i], fill_color="white", size=8)
-        elif df['dzip'][i] == df['h_zip'][i]:
+            p.circle(df.loc['ozip',i], df.loc['dzip',i], fill_color="white", size=8)
+        elif df.loc['dzip',i] == df.loc['h_zip',i]:
             #These refer to how well served their home zip is for trips in
-            p.circle(df['ozip'][i], df['dzip'][i], fill_color="black", size=8)
+            p.circle(df.loc['ozip',i], df.loc['dzip',i], fill_color="black", size=8)
         else:
             #These are trips they're taking throughout their day, as a
             #reflection of their work/life community's service via metro
-            p.circle(df['ozip'][i], df['dzip'][i], fill_color="red", size=8)
+            p.circle(df.loc['ozip',i], df.loc['dzip',i], fill_color="red", size=8)
     return p
