@@ -59,41 +59,19 @@ def drop_columns ():
     return(df)
 
 
-def make_useful():
+def group_data():
     output_file = "zipplots.html"
-    p = figure(plot_width=400, plot_height=400)
+    p = figure(title = "Heat Maps by Zip Code")
 
     #Count number of zip origins and destinations for heat mapping
-    ozip_counts = df['ozip'].value_counts()
-    dzip_counts = df['dzip'].value_counts()
+    ozip_counts = df.groupby('ozip').value_counts()
+    dzip_counts = df.groupby('dzip').value_counts()
 
-    #Get range of income between 0 and 100,000 for heat mapping
-    income_range_counts = df.groupby(pd.cut(df['hh_income_detailed'], np.arange(0,200000,20000))).count()
-
-    socio = pd.DataFrame(columns=['h_zip','hh_income_detailed','zone'])
-    #Run through and do manual count for incomes in specific h_zips, assign zone
-    for i in len(df['tripID']):
-        if df.loc['hh_income_detailed',i] >=0 and df.loc['hh_income_detailed',i] < 20000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '1']]
-        elif df.loc['hh_income_detailed',i] >=20000 and df.loc['hh_income_detailed',i] < 40000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '2']]
-        elif df.loc['hh_income_detailed',i] >=40000 and df.loc['hh_income_detailed',i] < 60000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '3']]
-        elif df.loc['hh_income_detailed',i] >=60000 and df.loc['hh_income_detailed',i] < 80000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '4']]
-        elif df.loc['hh_income_detailed',i] >=80000 and df.loc['hh_income_detailed',i] < 100000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '5']]
-        elif df.loc['hh_income_detailed',i] >=100000 and df.loc['hh_income_detailed',i] < 120000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '6']]
-        elif df.loc['hh_income_detailed',i] >=120000 and df.loc['hh_income_detailed',i] < 140000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '7']]
-        elif df.loc['hh_income_detailed',i] >=140000 and df.loc['hh_income_detailed',i] < 160000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '8']]
-        elif df.loc['hh_income_detailed',i] >=160000 and df.loc['hh_income_detailed',i] < 180000:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '9']]
-        else:
-            socio.loc[i] = [df.loc['h_zip',i], df.loc['hh_income_detailed',i], '10']]
-        return socio
+    #Get income counts for heat mapping
+    income_range_counts = df.groupby('h_zip')['hh_income_detailed'].value_counts()
+    
+    #Get trip type counts for analysis of accessibility of zip codes
+    trip_type_counts = df.groupby('h_zip')['triptype'].value_counts()
 
     #Run through zip columns and plot differently based on origin, destination,
     #and home zips. Visualization will then be specific for each
@@ -112,4 +90,5 @@ def make_useful():
             #These are trips they're taking throughout their day, as a
             #reflection of their work/life community's service via metro
             p.circle(df.loc['ozip',i], df.loc['dzip',i], fill_color="red", size=8)
-    return p
+
+        return p
