@@ -299,37 +299,41 @@ gsource_psrc = ColumnDataSource(g_df_psrc)
 output_notebook()
 
 TOOLS = "pan,wheel_zoom,reset,poly_select,box_select,tap,box_zoom"
-p_psrc = figure(title="Most Frequent Destinations by Zipcode",tools=TOOLS)
+p_psrc = figure(title="Most Frequent Destinations by Zipcode",tools=TOOLS,x_range=(-122.5, -122.1),y_range=(47.46, 47.8))
 
 # Plot grid
 grid2_psrc = p_psrc.patches('x', 'y', source=gsource_psrc,
-         fill_color='blue',
-         fill_alpha=0.010, line_color="black", line_width=1)
+         fill_color=palette[2],
+         fill_alpha=1.0, line_color="black", line_width=1)
+		 
+#Color and line width for routes
+col = palette1[2]
+wd = 0.5
 
-trip0 = p_psrc.line(t0_xs, t0_ys, color="red", line_width=2)
-trip1 = p_psrc.line(t1_xs, t1_ys, color="red", line_width=2)
-trip2 = p_psrc.line(t2_xs, t2_ys, color="red", line_width=2)
-trip3 = p_psrc.line(t3_xs, t3_ys, color="red", line_width=2)
-trip4 = p_psrc.line(t4_xs, t4_ys, color="red", line_width=2)
-trip5 = p_psrc.circle(t5_xs, t5_ys, color="red", line_width=2)
-trip6 = p_psrc.line(t6_xs, t6_ys, color="red", line_width=2)
-trip7 = p_psrc.circle(t7_xs, t7_ys, color="red", line_width=2)
-trip8 = p_psrc.line(t8_xs, t8_ys, color="red", line_width=2)
-trip9 = p_psrc.line(t9_xs, t9_ys, color="red", line_width=2)
-trip10 = p_psrc.line(t10_xs, t10_ys, color="red", line_width=2)
-trip11 = p_psrc.circle(t11_xs, t11_ys, color="red", line_width=2)
-trip12 = p_psrc.line(t12_xs, t12_ys, color="red", line_width=2)
-trip13 = p_psrc.circle(t13_xs, t13_ys, color="red", line_width=2)
-trip14 = p_psrc.line(t14_xs, t14_ys, color="red", line_width=2)
-trip15 = p_psrc.line(t15_xs, t15_ys, color="red", line_width=2)
-trip16 = p_psrc.line(t16_xs, t16_ys, color="red", line_width=2)
-trip17 = p_psrc.line(t17_xs, t17_ys, color="red", line_width=2)
-trip18 = p_psrc.line(t18_xs, t18_ys, color="red", line_width=2)
-trip19 = p_psrc.circle(t19_xs, t19_ys, color="red", line_width=2)
-trip20 = p_psrc.circle(t20_xs, t20_ys, color="red", line_width=2)
-trip21 = p_psrc.line(t21_xs, t21_ys, color="red", line_width=2)
-trip22 = p_psrc.line(t22_xs, t22_ys, color="red", line_width=2)
-trip23 = p_psrc.circle(t23_xs, t23_ys, color="red", line_width=2)
+trip0 = p_psrc.line(t0_xs, t0_ys, color=col, line_width=wd)
+trip1 = p_psrc.line(t1_xs, t1_ys, color=col, line_width=wd)
+trip2 = p_psrc.line(t2_xs, t2_ys, color=col, line_width=wd)
+trip3 = p_psrc.line(t3_xs, t3_ys, color=col, line_width=wd)
+trip4 = p_psrc.line(t4_xs, t4_ys, color=col, line_width=wd)
+trip5 = p_psrc.circle(t5_xs, t5_ys, color=col, line_width=wd)
+trip6 = p_psrc.line(t6_xs, t6_ys, color=col, line_width=wd)
+trip7 = p_psrc.circle(t7_xs, t7_ys, color=col, line_width=wd)
+trip8 = p_psrc.line(t8_xs, t8_ys, color=col, line_width=wd)
+trip9 = p_psrc.line(t9_xs, t9_ys, color=col, line_width=wd)
+trip10 = p_psrc.line(t10_xs, t10_ys, color=col, line_width=wd)
+trip11 = p_psrc.circle(t11_xs, t11_ys, color=col, line_width=wd)
+trip12 = p_psrc.line(t12_xs, t12_ys, color=col, line_width=wd)
+trip13 = p_psrc.circle(t13_xs, t13_ys, color=col, line_width=wd)
+trip14 = p_psrc.line(t14_xs, t14_ys, color=col, line_width=wd)
+trip15 = p_psrc.line(t15_xs, t15_ys, color=col, line_width=wd)
+trip16 = p_psrc.line(t16_xs, t16_ys, color=col, line_width=wd)
+trip17 = p_psrc.line(t17_xs, t17_ys, color=col, line_width=wd)
+trip18 = p_psrc.line(t18_xs, t18_ys, color=col, line_width=wd)
+trip19 = p_psrc.circle(t19_xs, t19_ys, color=col, line_width=wd)
+trip20 = p_psrc.circle(t20_xs, t20_ys, color=col, line_width=wd)
+trip21 = p_psrc.line(t21_xs, t21_ys, color=col, line_width=wd)
+trip22 = p_psrc.line(t22_xs, t22_ys, color=col, line_width=wd)
+trip23 = p_psrc.circle(t23_xs, t23_ys, color=col, line_width=wd)
 
 
 checkbox_psrc = CheckboxGroup(labels=used_zips)
@@ -477,9 +481,9 @@ checkbox_psrc_code = """
 """
 
 layout_psrc = row(p_psrc, widgetbox(checkbox_psrc))
-outfp_psrc = r"../examples/trip_map.html"
-output_file(outfp_psrc, title = "Trip Map", mode= 'cdn', root_dir=None)
-show(layout_psrc)
+#outfp_psrc = r"../examples/trip_map.html"
+#output_file(outfp_psrc, title = "Trip Map", mode= 'cdn', root_dir=None)
+#show(layout_psrc)
 
 
 #Seattle Transit Mapping
@@ -819,7 +823,8 @@ checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3,l4=r4, l5=r5, 
 
 group = widgetbox(checkbox)
 
-layout = gridplot([[p,group]])
+layout = row(p, widgetbox(checkbox) ,p_psrc, widgetbox(checkbox_psrc))
+
 outfp = r"../examples/transit_map.html"
 output_file(outfp , title='Bokeh Plot', mode='cdn', root_dir=None)
 show(layout)
