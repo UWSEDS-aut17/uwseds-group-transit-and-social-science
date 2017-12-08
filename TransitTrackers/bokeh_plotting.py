@@ -616,9 +616,7 @@ network29 = network.loc[network.ROUTE_NUM.isin(routes[29]) , :]
 network29['zip'] = zips_sea.zip[29]
 ns29 = GeoJSONDataSource(geojson=network29.to_json())
 
-network30 = network.loc[network.ROUTE_NUM.isin(routes[30]) , :]
-network30['zip'] = zips_sea.zip[30]
-ns30 = GeoJSONDataSource(geojson=network30.to_json())
+
 
 #Defining thresholds for income
 breaks = [x for x in range(55000, 110000, 5000)]
@@ -689,7 +687,7 @@ code ="""
     l27.visible = false;
     l28.visible = false;
     l29.visible = false;
-    l30.visible = false;
+   
 
     for (i in cb_obj.active) {
         //console.log(cb_obj.active[i]);
@@ -753,8 +751,7 @@ code ="""
             l28.visible = true;
         } else if (cb_obj.active[i] == 29) {
             l29.visible = true;
-        } else if (cb_obj.active[i] == 30) {
-            l30.visible = true;
+       
 
         }
     }
@@ -797,16 +794,16 @@ r17=p.multi_line('xs', 'ys', source=ns17, color= col, line_width= wd)
 r18=p.multi_line('xs', 'ys', source=ns18, color= col, line_width= wd)
 r19=p.multi_line('xs', 'ys', source=ns19, color= col, line_width= wd)
 r20=p.multi_line('xs', 'ys', source=ns20, color= col, line_width= wd)
-r21=p.multi_line('xs', 'ys', source=ns11, color= col, line_width= wd)
-r22=p.multi_line('xs', 'ys', source=ns12, color= col, line_width= wd)
-r23=p.multi_line('xs', 'ys', source=ns13, color= col, line_width= wd)
-r24=p.multi_line('xs', 'ys', source=ns14, color= col, line_width= wd)
-r25=p.multi_line('xs', 'ys', source=ns15, color= col, line_width= wd)
-r26=p.multi_line('xs', 'ys', source=ns16, color= col, line_width= wd)
-r27=p.multi_line('xs', 'ys', source=ns17, color= col, line_width= wd)
-r28=p.multi_line('xs', 'ys', source=ns18, color= col, line_width= wd)
-r29=p.multi_line('xs', 'ys', source=ns19, color= col, line_width= wd)
-r30=p.multi_line('xs', 'ys', source=ns20, color= col, line_width= wd)
+r21=p.multi_line('xs', 'ys', source=ns21, color= col, line_width= wd)
+r22=p.multi_line('xs', 'ys', source=ns22, color= col, line_width= wd)
+r23=p.multi_line('xs', 'ys', source=ns23, color= col, line_width= wd)
+r24=p.multi_line('xs', 'ys', source=ns24, color= col, line_width= wd)
+r25=p.multi_line('xs', 'ys', source=ns25, color= col, line_width= wd)
+r26=p.multi_line('xs', 'ys', source=ns26, color= col, line_width= wd)
+r27=p.multi_line('xs', 'ys', source=ns27, color= col, line_width= wd)
+r28=p.multi_line('xs', 'ys', source=ns28, color= col, line_width= wd)
+r29=p.multi_line('xs', 'ys', source=ns29, color= col, line_width= wd)
+
 
 #Defining hover tool
 ghover = HoverTool(renderers=[grid2])
@@ -817,7 +814,7 @@ p.add_tools(ghover)
 checkbox = CheckboxGroup(labels=list(zips_sea['zip'][0:30].astype(str)), active= [])
 checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3,l4=r4, l5=r5, l6=r6, l7=r7, l8=r8,l9=r9,l10=r10,l11=r11,
                                l12=r12,l13=r13,l14=r14,l15=r15,l16=r16,l17=r17,l18=r18,l19=r19,l20=r20,l21=r21,
-                                      l22=r22,l23=r23,l24=r24,l25=r25,l26=r26,l27=r27,l28=r28,l29=r29,l30=r30),
+                                      l22=r22,l23=r23,l24=r24,l25=r25,l26=r26,l27=r27,l28=r28,l29=r29),
                              code=code )
 
 group = widgetbox(checkbox)
