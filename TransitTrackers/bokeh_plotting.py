@@ -21,9 +21,9 @@ import math
 #Process data
 
 #Read initial dataframes from local disk
-households_df = pd.read_excel('uwseds-transit-trackers/Data/2014-pr3-hhsurvey-households.xlsx')
-persons_df = pd.read_excel('uwseds-transit-trackers/Data/2014-pr3-hhsurvey-persons.xlsx')
-trips_df = pd.read_excel('uwseds-transit-trackers/Data/2014-pr3-hhsurvey-trips.xlsx')
+households_df = pd.read_excel('../Data/2014-pr3-hhsurvey-households.xlsx')
+persons_df = pd.read_excel('../Data/2014-pr3-hhsurvey-persons.xlsx')
+trips_df = pd.read_excel('../Data/2014-pr3-hhsurvey-trips.xlsx')
 
 #Clean dataframes to include only Seattle data
 sea_trips_df = trips_df.loc[(trips_df['ocity']== 'SEATTLE') & (trips_df['dcity'] == 'SEATTLE')]
@@ -43,7 +43,7 @@ trip_freq = df.groupby(['ozip'])['dzip'].value_counts().to_frame()
 #Any frequency less than 50 is filtered out
 sub = trip_freq.query('dzip > 50')
 sub.to_csv('trip_freq_latlong.csv')
-trip_freq2 = pd.read_csv('C:/Users/tdjor/OneDrive/Documents/Grad School Classes/SoftwareDesign/uwseds-group-transit-and-social-science/Data/trip_freq_latlong.csv')
+trip_freq2 = pd.read_csv('trip_freq_latlong.csv')
 
 #Start assigning data of xs and ys from the origin and destination lat long
 #to new dataframes for each zip code
@@ -224,16 +224,16 @@ used_zips = ['98101','98102','98103','98104','98105','98106','98107',
 
 
 #Assign grid from Seattle zips shapefile
-grid_fp = r"uwseds-transit-trackers/Data/zips_sea/shp.shp"
+grid_fp = r"../Data/zips_sea/shp.shp"
 
 #Shapefile of bus routes of Seattle
-network_fp = r"uwseds-transit-trackers/Data/bus_seattle/network.shp"
+network_fp = r"../Data/bus_seattle/network.shp"
 
 #CSV file of zip codes and number of routes passing through them
-zips_sea =pd.read_csv('uwseds-transit-trackers/Data/zips_seattle.csv')
+zips_sea =pd.read_csv('../Data/zips_seattle.csv')
 
 #CSV file of route numbers that passing through each zip code
-zip_route =pd.read_csv('uwseds-transit-trackers/Data/routes_zipcode.csv')
+zip_route =pd.read_csv('../Data/routes_zipcode.csv')
 
 grid = gpd.read_file(grid_fp)
 network = gpd.read_file(network_fp)
@@ -425,7 +425,7 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2, l3=tri
         }
     }
 """)
-checkbox_code = """
+checkbox_psrc_code = """
     for (i in cb_obj.active) {
         //console.log(cb_obj.active[i]);
         if (cb_obj.active[i] == 0) {
@@ -481,7 +481,7 @@ checkbox_code = """
 """
 
 layout_psrc = row(p_psrc, widgetbox(checkbox_psrc))
-outfp_psrc = r"C:/Users/tdjor/OneDrive/Documents/Grad School Classes/SoftwareDesign/uwseds-group-transit-and-social-science/examples/trip_map.html"
+outfp_psrc = r"../examples/trip_map.html"
 output_file(outfp_psrc, title = "Trip Map", mode= 'cdn', root_dir=None)
 show(layout_psrc)
 
@@ -826,6 +826,6 @@ checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3,l4=r4, l5=r5, 
 group = widgetbox(checkbox)
 
 layout = gridplot([[p,group]])
-outfp = r"C:/Users/ASUS/Desktop/uwsed/uwseds-group-transit-and-social-science/examples/map.html"
+outfp = r"../examples/transit_map.html"
 output_file(outfp , title='Bokeh Plot', mode='cdn', root_dir=None)
 show(layout)
