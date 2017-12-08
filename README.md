@@ -14,6 +14,7 @@ routes will be overlaid with 'hot-spots' of travel destinations from the PSRC
 data.
 
 ![Image](http://metro.kingcounty.gov/maps/system/images/metro_system_map_nw_area.jpg?raw=true)
+
 Figure 1.
 
 Once we better understand how well the current public transportation system
