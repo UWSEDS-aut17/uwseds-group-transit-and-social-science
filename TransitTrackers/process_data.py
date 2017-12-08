@@ -5,23 +5,33 @@ import numpy as np
 
 
 def psrc_trip_data():
-    households_df = pd.read_excel('C:/Users/tdjor/OneDrive/Documents/Grad School Classes/SoftwareDesign/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-households.xlsx')
-    persons_df = pd.read_excel('C:/Users/tdjor/OneDrive/Documents/Grad School Classes/SoftwareDesign/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-persons.xlsx')
-    trips_df = pd.read_excel('C:/Users/tdjor/OneDrive/Documents/Grad School Classes/SoftwareDesign/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-trips.xlsx')
+    #Read initial dataframes from local disk
+    households_df = pd.read_excel('uwseds-transit-trackers/Data/2014-pr3-hhsurvey-households.xlsx')
+    persons_df = pd.read_excel('uwseds-transit-trackers/Data/2014-pr3-hhsurvey-persons.xlsx')
+    trips_df = pd.read_excel('uwseds-transit-trackers/Data/2014-pr3-hhsurvey-trips.xlsx')
 
+    #Clean dataframes to include only Seattle data
     sea_trips_df = trips_df.loc[(trips_df['ocity']== 'SEATTLE') & (trips_df['dcity'] == 'SEATTLE')]
     sea_households_df = households_df.loc[households_df['hhid'].isin(sea_trips_df['hhid'])]
     sea_person_df = persons_df.loc[persons_df['personid'].isin(sea_trips_df['personID'])]
 
+    #Merge dataframes to one all_df
     trips_households_df = sea_trips_df.merge(sea_households_df, left_on = 'hhid', right_on = 'hhid', how = 'inner')
     all_df = trips_households_df.merge(sea_person_df, left_on ='personID', right_on='personid', how = 'inner')
 
+    #Extract only the columns we need from the all_df to df
     df = all_df[['ozip', 'dzip']]
+
+    #Want a count of trips taken from any ozip to any dzip
     trip_freq = df.groupby(['ozip'])['dzip'].value_counts().to_frame()
+
+    #Any frequency less than 50 is filtered out
     sub = trip_freq.query('dzip > 50')
-    sub.to_csv('trip_freq.csv')
+    sub.to_csv('trip_freq_latlong.csv')
     trip_freq2 = pd.read_csv('C:/Users/tdjor/OneDrive/Documents/Grad School Classes/SoftwareDesign/uwseds-group-transit-and-social-science/Data/trip_freq_latlong.csv')
 
+    #Start assigning data of xs and ys from the origin and destination lat long
+    #to new dataframes for each zip code
     freq_trip0 = trip_freq2.query('ozip == 98101').reset_index()
     freq_trip0 = freq_trip0[['olat','olon','dlat','dlon']]
     t0_ys = [freq_trip0.loc[0]['olat'],freq_trip0.loc[1]['dlat'],
@@ -188,6 +198,7 @@ def psrc_trip_data():
     t23_ys = [freq_trip23.loc[0]['olat'],freq_trip23.loc[0]['dlat']]
     t23_xs = [freq_trip23.loc[0]['olon'],freq_trip23.loc[0]['dlon']]
 
+    #Create list of the zip codes we're interested in
     used_zips = ['98101','98102','98103','98104','98105','98106','98107',
             '98108','98109','98112','98115','98116','98117','98118',
              '98119','98121','98122','98125','98126','98133','98136',
