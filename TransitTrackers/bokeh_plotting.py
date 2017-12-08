@@ -2,7 +2,6 @@ from bokeh.io import output_file, show
 from bokeh.models import ColumnDataSource, CustomJS, HoverTool, LogColorMapper, GMapPlot, GMapOptions, ColumnDataSource, Circle, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
 from bokeh.io import show, output_notebook
 from bokeh.models import GeoJSONDataSource, LinearColorMapper
-from bokeh.palettes import Viridis6 as palette
 from bokeh.palettes import Viridis11 as palette
 from bokeh.palettes import Magma4 as palette1
 from bokeh.plotting import figure, curdoc, output_file, show
