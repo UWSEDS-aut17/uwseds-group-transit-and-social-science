@@ -41,8 +41,8 @@ trip_freq = df.groupby(['ozip'])['dzip'].value_counts().to_frame()
 
 #Any frequency less than 50 is filtered out
 sub = trip_freq.query('dzip > 50')
-sub.to_csv('trip_freq_latlong.csv')
-trip_freq2 = pd.read_csv('trip_freq_latlong.csv')
+sub.to_csv('trip_freq.csv')
+trip_freq2 = pd.read_csv('../Data/trip_freq_latlong.csv')
 
 #Start assigning data of xs and ys from the origin and destination lat long
 #to new dataframes for each zip code
@@ -278,9 +278,6 @@ def getCoords(row, geom_col, coord_type):
 
     # Check the geometry type
     gtype = geom.geom_type
-
-    # "Normal" geometries
-    # -------------------
 
     if gtype == "Point":
         return getPointCoords(geom, coord_type)
