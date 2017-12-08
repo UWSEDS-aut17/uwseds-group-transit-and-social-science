@@ -5,12 +5,11 @@ except:
     from distutils.core import setup
 
 
-opts = dict(name='uwseds-group-transit-and-social-science',
+opts = dict(name='uwseds-transit-trackers',
             description='A python package to analyze transit trends in Seattle',
-            url='https://github.com/UWSEDS-aut17/uwseds-group-transit',
-                '-and-social-science',
+            url='https://github.com/UWSEDS-aut17/uwseds-group-transit-trackers',
             version='1.0',
-            packages=['uwseds-group-transit-and-social-science'],
+            packages=['uwseds-transit-trackers'],
             install_requires=['numpy',
                               'pandas',
                               'geopandas',
