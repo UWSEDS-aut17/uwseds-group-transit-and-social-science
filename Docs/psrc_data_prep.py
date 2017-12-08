@@ -6,15 +6,15 @@ import zipfile
 #    Reading data and making pandas dataframes
 #    from PSRC xlsx files
 def get_data ():
-    households_df = pd.read_excel('C:/Users/ricoshea8/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-households.xlsx')
-    persons_df = pd.read_excel('C:/Users/ricoshea8/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-persons.xlsx')
-    trips_df = pd.read_excel('C:/Users/ricoshea8/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-trips.xlsx')
+    households_df = pd.read_excel('/Users/ricoshea8/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-households.xlsx')
+    persons_df = pd.read_excel('/Users/ricoshea8/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-persons.xlsx')
+    trips_df = pd.read_excel('/Users/ricoshea8/CSE583/Project/uwseds-group-transit-and-social-science/Data/2014-pr3-hhsurvey-trips.xlsx')
 
 #   Extract trips with origin and destination in King County
 def extract_trips ():
-    king_trips_df = trips_df.loc[(trips_df['ozip'] == 1) & (trips_df['dzip'] == 1)]
-    king_households_df = households_df.loc[households_df['hhid'].isin( king_trips_df['hhid'])]
-    king_persons_df = persons_df.loc[persons_df['personid'].isin( king_trips_df['personID'])]
+    sea_trips_df = trips_df.loc[(trips_df['ocity'] == 'SEATTLE') & (trips_df['dcity'] == 'SEATTLE')]
+    sea_households_df = households_df.loc[households_df['hhid'].isin(sea_trips_df['hhid'])]
+    sea_persons_df = persons_df.loc[persons_df['personid'].isin(sea_trips_df['personID'])]
 
 
 #   Function to merge 3 datasets
@@ -69,7 +69,7 @@ def group_data():
 
     #Get income counts for heat mapping
     income_range_counts = df.groupby('h_zip')['hh_income_detailed'].value_counts()
-    
+
     #Get trip type counts for analysis of accessibility of zip codes
     trip_type_counts = df.groupby('h_zip')['triptype'].value_counts()
 
