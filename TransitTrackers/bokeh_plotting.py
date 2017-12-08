@@ -285,6 +285,8 @@ def psrc_trip_plotting():
     """
 
     layout = row(p, widgetbox(checkbox))
+    outfp = r"C:/Users/tdjor/OneDrive/Documents/Grad School Classes/SoftwareDesign/uwseds-group-transit-and-social-science/examples/trip_map.html"
+    output_file(outfp, title = "Trip Map", mode= 'cdn', root_dir=None)
     show(layout)
 
 
@@ -635,7 +637,6 @@ def bus_plotting():
     group = widgetbox(checkbox)
 
     layout = gridplot([[p,group]])
-
     outfp = r"C:/Users/ASUS/Desktop/uwsed/uwseds-group-transit-and-social-science/examples/map.html"
     output_file(outfp , title='Bokeh Plot', mode='cdn', root_dir=None)
     show(layout)
