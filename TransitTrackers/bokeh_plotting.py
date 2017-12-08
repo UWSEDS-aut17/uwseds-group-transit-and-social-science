@@ -226,7 +226,7 @@ used_zips = ['98101','98102','98103','98104','98105','98106','98107',
 grid_fp = r"../Data/zips_sea/shp.shp"
 
 #Shapefile of bus routes of Seattle
-network_fp = r"../Data/bus_seattle/network.shp"
+network_fp = r"../Data/network.shp"
 
 #CSV file of zip codes and number of routes passing through them
 zips_sea =pd.read_csv('../Data/zips_seattle.csv')
