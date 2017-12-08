@@ -19,7 +19,7 @@ import math
 
 #Process data
 
-#Read initial dataframes from local disk
+#Read initial dataframes from GitHub
 households_df = pd.read_excel('../Data/2014-pr3-hhsurvey-households.xlsx')
 persons_df = pd.read_excel('../Data/2014-pr3-hhsurvey-persons.xlsx')
 trips_df = pd.read_excel('../Data/2014-pr3-hhsurvey-trips.xlsx')
