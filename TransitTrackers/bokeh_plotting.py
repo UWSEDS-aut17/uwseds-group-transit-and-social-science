@@ -279,9 +279,6 @@ def getCoords(row, geom_col, coord_type):
     # Check the geometry type
     gtype = geom.geom_type
 
-    # "Normal" geometries
-    # -------------------
-
     if gtype == "Point":
         return getPointCoords(geom, coord_type)
     elif gtype == "LineString":
