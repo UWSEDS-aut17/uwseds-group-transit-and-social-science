@@ -8,6 +8,7 @@ from bokeh.plotting import figure, curdoc, output_file, show
 from bokeh.events import Tap
 from bokeh.layouts import widgetbox, column, row, gridplot
 from bokeh.models.widgets import Button, CheckboxGroup, Select, Paragraph
+import coffeescript
 
 import os
 import geopandas as gpd
@@ -245,7 +246,7 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
                                     l14=trip14, l15=trip15, l16=trip16,
                                     l17=trip17, l18=trip18, l19=trip19,
                                     l20=trip20, l21=trip21, l22=trip22,
-                                    l23=trip23 ),
+                                    l23=trip23 ), lang = "coffeescript",
                                     code="""
     //console.log(cb_obj.active);
     l0.visible = false;
@@ -731,6 +732,7 @@ checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3,l4=r4,
                                 l16=r16, l17=r17, l18=r18,l19=r19, l20=r20,
                                 l21=r21, l22=r22, l23=r23, l24=r24, l25=r25,
                                 l26=r26, l27=r27, l28=r28, l29=r29),
+                                lang="coffeescript",
                                 code=code )
 
 para_routes = Paragraph(text="""Map of Bus Routes and Seattle Income
