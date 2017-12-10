@@ -40,7 +40,7 @@ df = all_df[['ozip', 'dzip']]
 trip_freq = df.groupby(['ozip'])['dzip'].value_counts().to_frame()
 
 #Any frequency less than 50 is filtered out
-sub = trip_freq.query('dzip > 25')
+sub = trip_freq.query('dzip > 10')
 sub.to_csv('../Data/trip_freq.csv')
 trip_freq2 = pd.read_csv('../Data/trip_freq.csv')
 zip_latlon = pd.read_excel('../Data/zipcode_latlong.xlsx')
@@ -109,15 +109,17 @@ def make_trip_xsys(origin_zip):
 [t19_xs,t19_ys] = make_trip_xsys('98133')
 [t20_xs,t20_ys] = make_trip_xsys('98136')
 [t21_xs,t21_ys] = make_trip_xsys('98144')
-[t22_xs,t22_ys] = make_trip_xsys('98195')
-[t23_xs,t23_ys] = make_trip_xsys('98199')
+[t22_xs,t22_ys] = make_trip_xsys('98146')
+[t23_xs,t23_ys] = make_trip_xsys('98177')
+[t24_xs,t24_ys] =make_trip_xsys('98178')
+[t25_xs,t25_ys] =make_trip_xsys('98195')
+[t26_xs,t26_ys] =make_trip_xsys('98199')
 
 #Create list of the zip codes we're interested in
 used_zips = ['98101','98102','98103','98104','98105','98106','98107',
-        '98108','98109','98112','98115','98116','98117','98118',
-         '98119','98121','98122','98125','98126','98133','98136',
-         '98144','98195','98199']
-
+            '98108','98109','98112','98115','98116','98117','98118',
+             '98119','98121','98122','98125','98126','98133','98136',
+             '98144','98146','98177','98178','98195','98199']
 
 #Start Bokeh Plotting
 
@@ -207,8 +209,8 @@ grid2_psrc = p_psrc.patches('x', 'y', source=gsource_psrc,
          fill_alpha=1.0, line_color="black", line_width=1)
 
 #Color and line width for routes
-col = palette1[2]
-wd = 0.5
+col = palette1[3]
+wd = 2
 
 trip0 = p_psrc.line(t0_xs, t0_ys, color=col, line_width=wd)
 trip1 = p_psrc.line(t1_xs, t1_ys, color=col, line_width=wd)
@@ -233,8 +235,10 @@ trip19 = p_psrc.line(t19_xs, t19_ys, color=col, line_width=wd)
 trip20 = p_psrc.line(t20_xs, t20_ys, color=col, line_width=wd)
 trip21 = p_psrc.line(t21_xs, t21_ys, color=col, line_width=wd)
 trip22 = p_psrc.line(t22_xs, t22_ys, color=col, line_width=wd)
-trip23 = p_psrc.circle(t23_xs, t23_ys, color=col, line_width=wd)
-
+trip23 = p_psrc.line(t23_xs, t23_ys, color=col, line_width=wd)
+trip24 = p_psrc.line(t24_xs, t24_ys, color=col, line_width=wd)
+trip25 = p_prsc.line(t25_xs, t25_ys, color=col, line_width=wd)
+trip26 = p_prsc.line(t26_xs, t26_ys, color=col, line_width=wd)
 
 checkbox_psrc = CheckboxGroup(labels=used_zips)
 
@@ -245,7 +249,8 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
                                     l14=trip14, l15=trip15, l16=trip16,
                                     l17=trip17, l18=trip18, l19=trip19,
                                     l20=trip20, l21=trip21, l22=trip22,
-                                    l23=trip23 ),
+                                    l23=trip23, l24 = trip24,
+                                    l25 = trip25, l26 = trip26 ),
                                     code="""
     //console.log(cb_obj.active);
     l0.visible = false;
@@ -272,6 +277,9 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
     l21.visible = false;
     l22.visible = false;
     l23.visible = false;
+    l24.visible = false;
+    l25.visible = false;
+    l26.visible = false;
 
     for (i in cb_obj.active) {
         //console.log(cb_obj.active[i]);
@@ -323,7 +331,12 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
             l22.visible = true;
         } else if (cb_obj.active[i] == 23) {
             l23.visible = true;
-
+        } else if (cb_obj.active[i] == 24) {
+            l24.visible = true;
+        } else if (cb_obj.active[i] == 25) {
+            l25.visible = true;
+        } else if (cb_obj.active[i] == 26) {
+            l26.visible = true;
         }
     }
 """)
@@ -378,6 +391,12 @@ checkbox_psrc_code = """
             l22.visible = true;
         } else if (cb_obj.active[i] == 23) {
             l23.visible = true;
+        } else if (cb_obj.active[i] == 24) {
+            l24.visible = true;
+        } else if (cb_obj.active[i] == 25) {
+            l25.visible = true;
+        } else if (cb_obj.active[i] == 26) {
+            l26.visible = true;
         }
     }
 """
