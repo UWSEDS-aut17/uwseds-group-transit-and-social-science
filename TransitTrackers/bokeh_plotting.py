@@ -7,7 +7,7 @@ from bokeh.palettes import Magma4 as palette1
 from bokeh.plotting import figure, curdoc, output_file, show
 from bokeh.events import Tap
 from bokeh.layouts import widgetbox, column, row, gridplot
-from bokeh.models.widgets import Button,CheckboxGroup, Select
+from bokeh.models.widgets import Button, CheckboxGroup, Select, Paragraph
 
 import os
 import geopandas as gpd
@@ -40,177 +40,77 @@ df = all_df[['ozip', 'dzip']]
 trip_freq = df.groupby(['ozip'])['dzip'].value_counts().to_frame()
 
 #Any frequency less than 50 is filtered out
-sub = trip_freq.query('dzip > 50')
-sub.to_csv('trip_freq.csv')
-trip_freq2 = pd.read_csv('../Data/trip_freq_latlong.csv')
+sub = trip_freq.query('dzip > 25')
+sub.to_csv('../Data/trip_freq.csv')
+trip_freq2 = pd.read_csv('../Data/trip_freq.csv')
+zip_latlon = pd.read_excel('../Data/zipcode_latlong.xlsx')
+
+# Adds latitude and longitude to the origin and destination zipcodes
+olat = list(range(0,len(trip_freq2)))
+olon = list(range(0,len(trip_freq2)))
+dlat = list(range(0,len(trip_freq2)))
+dlon = list(range(0,len(trip_freq2)))
+
+for i in list(range(0,len(trip_freq2))):
+    origin_zip = trip_freq2.loc[i]['ozip']
+    dest_zip = trip_freq2.loc[i]['dzip']
+    olat[i] = float(zip_latlon.query('zipcode ==' +
+                str(origin_zip))[['lat']].reset_index().loc[0]['lat'])
+    olon[i] = float(zip_latlon.query('zipcode ==' +
+                str(origin_zip))[['lon']].reset_index().loc[0]['lon'])
+    dlat[i] = float(zip_latlon.query('zipcode ==' +
+                str(dest_zip))[['lat']].reset_index().loc[0]['lat'])
+    dlon[i] = float(zip_latlon.query('zipcode ==' +
+                str(dest_zip))[['lon']].reset_index().loc[0]['lon'])
+
+trip_freq2['olat'] = pd.Series(olat, index=trip_freq2.index)
+trip_freq2['olon'] = pd.Series(olon, index=trip_freq2.index)
+trip_freq2['dlat'] = pd.Series(dlat, index=trip_freq2.index)
+trip_freq2['dlon'] = pd.Series(dlon, index=trip_freq2.index)
+trip_freq2.to_csv('../Data/trip_freq_latlong.csv')
+
+def make_trip_xsys(origin_zip):
+    '''
+    This function constructs the list of xs and ys
+    properly formatted for the bokeh line plot.
+    '''
+    freq_trip = trip_freq2.query('ozip ==' + origin_zip).reset_index()
+    freq_trip = freq_trip[['olat','olon','dlat','dlon']]
+    ys = []
+    xs = []
+    for i in list(range(0,len(freq_trip))):
+        ys = ys + [float(freq_trip.loc[0]['olat']),
+                    float(freq_trip.loc[i]['dlat'])]
+        xs = xs + [float(freq_trip.loc[0]['olon']),
+                    float(freq_trip.loc[i]['dlon'])]
+    return xs, ys
 
 #Start assigning data of xs and ys from the origin and destination lat long
 #to new dataframes for each zip code
-freq_trip0 = trip_freq2.query('ozip == 98101').reset_index()
-freq_trip0 = freq_trip0[['olat','olon','dlat','dlon']]
-t0_ys = [freq_trip0.loc[0]['olat'],freq_trip0.loc[1]['dlat'],
-         freq_trip0.loc[0]['olat'],freq_trip0.loc[2]['dlat'],
-         freq_trip0.loc[0]['olat'],freq_trip0.loc[3]['dlat'],
-         freq_trip0.loc[0]['olat'],freq_trip0.loc[4]['dlat']]
-t0_xs = [freq_trip0.loc[0]['olon'],freq_trip0.loc[1]['dlon'],
-         freq_trip0.loc[0]['olon'],freq_trip0.loc[2]['dlon'],
-         freq_trip0.loc[0]['olon'],freq_trip0.loc[3]['dlon'],
-         freq_trip0.loc[0]['olon'],freq_trip0.loc[4]['dlon']]
-
-freq_trip1 = trip_freq2.query('ozip == 98102').reset_index()
-freq_trip1 = freq_trip1[['olat','olon','dlat','dlon']]
-t1_ys = [freq_trip1.loc[0]['olat'],freq_trip1.loc[1]['dlat']]
-t1_xs = [freq_trip1.loc[0]['olon'],freq_trip1.loc[1]['dlon']]
-
-freq_trip2 = trip_freq2.query('ozip == 98103').reset_index()
-freq_trip2 = freq_trip2[['olat','olon','dlat','dlon']]
-t2_ys = [freq_trip2.loc[0]['olat'],freq_trip2.loc[1]['dlat'],
-         freq_trip2.loc[0]['olat'],freq_trip2.loc[2]['dlat'],
-         freq_trip2.loc[0]['olat'],freq_trip2.loc[3]['dlat'],
-         freq_trip2.loc[0]['olat'],freq_trip2.loc[4]['dlat']]
-t2_xs = [freq_trip2.loc[0]['olon'],freq_trip2.loc[1]['dlon'],
-         freq_trip2.loc[0]['olon'],freq_trip2.loc[2]['dlon'],
-         freq_trip2.loc[0]['olon'],freq_trip2.loc[3]['dlon'],
-         freq_trip2.loc[0]['olon'],freq_trip2.loc[4]['dlon']]
-
-freq_trip3 = trip_freq2.query('ozip == 98104').reset_index()
-freq_trip3 = freq_trip3[['olat','olon','dlat','dlon']]
-t3_ys = [freq_trip3.loc[0]['olat'],freq_trip3.loc[1]['dlat'],
-        freq_trip3.loc[0]['olat'],freq_trip3.loc[2]['dlat']]
-t3_xs = [freq_trip3.loc[0]['olon'],freq_trip3.loc[1]['dlon'],
-         freq_trip3.loc[0]['olon'],freq_trip3.loc[2]['dlon']]
-
-freq_trip4 = trip_freq2.query('ozip == 98105').reset_index()
-freq_trip4 = freq_trip4[['olat','olon','dlat','dlon']]
-t4_ys = [freq_trip4.loc[0]['olat'],freq_trip4.loc[1]['dlat'],
-         freq_trip4.loc[0]['olat'],freq_trip4.loc[2]['dlat'],
-         freq_trip4.loc[0]['olat'],freq_trip4.loc[3]['dlat']]
-t4_xs = [freq_trip4.loc[0]['olon'],freq_trip4.loc[1]['dlon'],
-         freq_trip4.loc[0]['olon'],freq_trip4.loc[2]['dlon'],
-         freq_trip4.loc[0]['olon'],freq_trip4.loc[3]['dlon']]
-
-freq_trip5 = trip_freq2.query('ozip == 98106').reset_index()
-freq_trip5 = freq_trip5[['olat','olon','dlat','dlon']]
-t5_ys = [freq_trip5.loc[0]['olat'],freq_trip5.loc[0]['dlat']]
-t5_xs = [freq_trip5.loc[0]['olon'],freq_trip5.loc[0]['dlon']]
-
-freq_trip6 = trip_freq2.query('ozip == 98107').reset_index()
-freq_trip6 = freq_trip6[['olat','olon','dlat','dlon']]
-t6_ys = [freq_trip6.loc[0]['olat'],freq_trip6.loc[1]['dlat'],
-         freq_trip6.loc[0]['olat'],freq_trip6.loc[2]['dlat'],
-         freq_trip6.loc[0]['olat'],freq_trip6.loc[3]['dlat']]
-t6_xs = [freq_trip6.loc[0]['olon'],freq_trip6.loc[1]['dlon'],
-         freq_trip6.loc[0]['olon'],freq_trip6.loc[2]['dlon'],
-         freq_trip6.loc[0]['olon'],freq_trip6.loc[3]['dlon']]
-
-freq_trip7 = trip_freq2.query('ozip == 98108').reset_index()
-freq_trip7 = freq_trip7[['olat','olon','dlat','dlon']]
-t7_ys = [freq_trip7.loc[0]['olat'],freq_trip7.loc[0]['dlat']]
-t7_xs = [freq_trip7.loc[0]['olon'],freq_trip7.loc[0]['dlon']]
-
-freq_trip8 = trip_freq2.query('ozip == 98109').reset_index()
-freq_trip8 = freq_trip8[['olat','olon','dlat','dlon']]
-t8_ys = [freq_trip8.loc[0]['olat'],freq_trip8.loc[1]['dlat'],
-         freq_trip8.loc[0]['olat'],freq_trip8.loc[2]['dlat'],
-         freq_trip8.loc[0]['olat'],freq_trip8.loc[3]['dlat'],
-         freq_trip8.loc[0]['olat'],freq_trip8.loc[4]['dlat']]
-t8_xs = [freq_trip8.loc[0]['olon'],freq_trip8.loc[1]['dlon'],
-         freq_trip8.loc[0]['olon'],freq_trip8.loc[2]['dlon'],
-         freq_trip8.loc[0]['olon'],freq_trip8.loc[3]['dlon'],
-         freq_trip8.loc[0]['olon'],freq_trip8.loc[4]['dlon']]
-
-freq_trip9 = trip_freq2.query('ozip == 98112').reset_index()
-freq_trip9 = freq_trip9[['olat','olon','dlat','dlon']]
-t9_ys = [freq_trip9.loc[0]['olat'],freq_trip9.loc[1]['dlat'],
-         freq_trip9.loc[0]['olat'],freq_trip9.loc[2]['dlat']]
-t9_xs = [freq_trip9.loc[0]['olon'],freq_trip9.loc[1]['dlon'],
-         freq_trip9.loc[0]['olon'],freq_trip9.loc[2]['dlon']]
-
-freq_trip10 = trip_freq2.query('ozip == 98115').reset_index()
-freq_trip10 = freq_trip10[['olat','olon','dlat','dlon']]
-t10_ys = [freq_trip10.loc[0]['olat'],freq_trip10.loc[1]['dlat'],
-          freq_trip10.loc[0]['olat'],freq_trip10.loc[2]['dlat'],
-          freq_trip10.loc[0]['olat'],freq_trip10.loc[3]['dlat']]
-t10_xs = [freq_trip10.loc[0]['olon'],freq_trip10.loc[1]['dlon'],
-          freq_trip10.loc[0]['olon'],freq_trip10.loc[2]['dlon'],
-          freq_trip10.loc[0]['olon'],freq_trip10.loc[3]['dlon']]
-
-freq_trip11 = trip_freq2.query('ozip == 98116').reset_index()
-freq_trip11 = freq_trip11[['olat','olon','dlat','dlon']]
-t11_ys = [freq_trip11.loc[0]['olat'],freq_trip11.loc[0]['dlat']]
-t11_xs = [freq_trip11.loc[0]['olon'],freq_trip11.loc[0]['dlon']]
-
-freq_trip12 = trip_freq2.query('ozip == 98117').reset_index()
-freq_trip12 = freq_trip12[['olat','olon','dlat','dlon']]
-t12_ys = [freq_trip12.loc[0]['olat'],freq_trip12.loc[1]['dlat'],
-          freq_trip12.loc[0]['olat'],freq_trip12.loc[2]['dlat']]
-t12_xs = [freq_trip12.loc[0]['olon'],freq_trip12.loc[1]['dlon'],
-          freq_trip12.loc[0]['olon'],freq_trip12.loc[2]['dlon']]
-
-freq_trip13 = trip_freq2.query('ozip == 98118').reset_index()
-freq_trip13 = freq_trip13[['olat','olon','dlat','dlon']]
-t13_ys = [freq_trip13.loc[0]['olat'],freq_trip13.loc[0]['dlat']]
-t13_xs = [freq_trip13.loc[0]['olon'],freq_trip13.loc[0]['dlon']]
-
-freq_trip14 = trip_freq2.query('ozip == 98119').reset_index()
-freq_trip14 = freq_trip14[['olat','olon','dlat','dlon']]
-t14_ys = [freq_trip14.loc[0]['olat'],freq_trip14.loc[1]['dlat']]
-t14_xs = [freq_trip14.loc[0]['olon'],freq_trip14.loc[1]['dlon']]
-
-freq_trip15 = trip_freq2.query('ozip == 98121').reset_index()
-freq_trip15 = freq_trip15[['olat','olon','dlat','dlon']]
-t15_ys = [freq_trip15.loc[0]['olat'],freq_trip15.loc[1]['dlat'],
-          freq_trip15.loc[0]['olat'],freq_trip15.loc[2]['dlat']]
-t15_xs = [freq_trip15.loc[0]['olon'],freq_trip15.loc[1]['dlon'],
-          freq_trip15.loc[0]['olon'],freq_trip15.loc[2]['dlon']]
-
-freq_trip16 = trip_freq2.query('ozip == 98122').reset_index()
-freq_trip16 = freq_trip16[['olat','olon','dlat','dlon']]
-t16_ys = [freq_trip16.loc[0]['olat'],freq_trip16.loc[1]['dlat'],
-          freq_trip16.loc[0]['olat'],freq_trip16.loc[2]['dlat'],
-          freq_trip16.loc[0]['olat'],freq_trip16.loc[3]['dlat'],
-          freq_trip16.loc[0]['olat'],freq_trip16.loc[4]['dlat'],
-          freq_trip16.loc[0]['olat'],freq_trip16.loc[5]['dlat']]
-t16_xs = [freq_trip16.loc[0]['olon'],freq_trip16.loc[1]['dlon'],
-          freq_trip16.loc[0]['olon'],freq_trip16.loc[2]['dlon'],
-          freq_trip16.loc[0]['olon'],freq_trip16.loc[3]['dlon'],
-          freq_trip16.loc[0]['olon'],freq_trip16.loc[4]['dlon'],
-          freq_trip16.loc[0]['olon'],freq_trip16.loc[5]['dlon']]
-
-freq_trip17 = trip_freq2.query('ozip == 98125').reset_index()
-freq_trip17 = freq_trip17[['olat','olon','dlat','dlon']]
-t17_ys = [freq_trip17.loc[0]['olat'],freq_trip17.loc[1]['dlat']]
-t17_xs = [freq_trip17.loc[0]['olon'],freq_trip17.loc[1]['dlon']]
-
-freq_trip18 = trip_freq2.query('ozip == 98126').reset_index()
-freq_trip18 = freq_trip18[['olat','olon','dlat','dlon']]
-t18_ys = [freq_trip18.loc[0]['olat'],freq_trip18.loc[1]['dlat']]
-t18_xs = [freq_trip18.loc[0]['olon'],freq_trip18.loc[1]['dlon']]
-
-freq_trip19 = trip_freq2.query('ozip == 98133').reset_index()
-freq_trip19 = freq_trip19[['olat','olon','dlat','dlon']]
-t19_ys = [freq_trip19.loc[0]['olat'],freq_trip19.loc[0]['dlat']]
-t19_xs = [freq_trip19.loc[0]['olon'],freq_trip19.loc[0]['dlon']]
-
-freq_trip20 = trip_freq2.query('ozip == 98136').reset_index()
-freq_trip20 = freq_trip20[['olat','olon','dlat','dlon']]
-t20_ys = [freq_trip20.loc[0]['olat'],freq_trip20.loc[0]['dlat']]
-t20_xs = [freq_trip20.loc[0]['olon'],freq_trip20.loc[0]['dlon']]
-
-freq_trip21 = trip_freq2.query('ozip == 98144').reset_index()
-freq_trip21 = freq_trip21[['olat','olon','dlat','dlon']]
-t21_ys = [freq_trip21.loc[0]['olat'],freq_trip21.loc[1]['dlat']]
-t21_xs = [freq_trip21.loc[0]['olon'],freq_trip21.loc[1]['dlon']]
-
-freq_trip22 = trip_freq2.query('ozip == 98195').reset_index()
-freq_trip22 = freq_trip22[['olat','olon','dlat','dlon']]
-t22_ys = [freq_trip22.loc[0]['olat'],freq_trip22.loc[0]['dlat']]
-t22_xs = [freq_trip22.loc[0]['olon'],freq_trip22.loc[0]['dlon']]
-
-freq_trip23 = trip_freq2.query('ozip == 98199').reset_index()
-freq_trip23 = freq_trip23[['olat','olon','dlat','dlon']]
-t23_ys = [freq_trip23.loc[0]['olat'],freq_trip23.loc[0]['dlat']]
-t23_xs = [freq_trip23.loc[0]['olon'],freq_trip23.loc[0]['dlon']]
+[t0_xs,t0_ys] = make_trip_xsys('98101')
+[t1_xs,t1_ys] = make_trip_xsys('98102')
+[t2_xs,t2_ys] = make_trip_xsys('98103')
+[t3_xs,t3_ys] = make_trip_xsys('98104')
+[t4_xs,t4_ys] = make_trip_xsys('98105')
+[t5_xs,t5_ys] = make_trip_xsys('98106')
+[t6_xs,t6_ys] = make_trip_xsys('98107')
+[t7_xs,t7_ys] = make_trip_xsys('98108')
+[t8_xs,t8_ys] = make_trip_xsys('98109')
+[t9_xs,t9_ys] = make_trip_xsys('98112')
+[t10_xs,t10_ys] = make_trip_xsys('98115')
+[t11_xs,t11_ys] = make_trip_xsys('98116')
+[t12_xs,t12_ys] = make_trip_xsys('98117')
+[t13_xs,t13_ys] = make_trip_xsys('98118')
+[t14_xs,t14_ys] = make_trip_xsys('98119')
+[t15_xs,t15_ys] = make_trip_xsys('98121')
+[t16_xs,t16_ys] = make_trip_xsys('98122')
+[t17_xs,t17_ys] = make_trip_xsys('98125')
+[t18_xs,t18_ys] = make_trip_xsys('98126')
+[t19_xs,t19_ys] = make_trip_xsys('98133')
+[t20_xs,t20_ys] = make_trip_xsys('98136')
+[t21_xs,t21_ys] = make_trip_xsys('98144')
+[t22_xs,t22_ys] = make_trip_xsys('98195')
+[t23_xs,t23_ys] = make_trip_xsys('98199')
 
 #Create list of the zip codes we're interested in
 used_zips = ['98101','98102','98103','98104','98105','98106','98107',
@@ -305,7 +205,7 @@ p_psrc = figure(title="Most Frequent Destinations by Zipcode",tools=TOOLS,x_rang
 grid2_psrc = p_psrc.patches('x', 'y', source=gsource_psrc,
          fill_color=palette[2],
          fill_alpha=1.0, line_color="black", line_width=1)
-		 
+
 #Color and line width for routes
 col = palette1[2]
 wd = 0.5
@@ -315,22 +215,22 @@ trip1 = p_psrc.line(t1_xs, t1_ys, color=col, line_width=wd)
 trip2 = p_psrc.line(t2_xs, t2_ys, color=col, line_width=wd)
 trip3 = p_psrc.line(t3_xs, t3_ys, color=col, line_width=wd)
 trip4 = p_psrc.line(t4_xs, t4_ys, color=col, line_width=wd)
-trip5 = p_psrc.circle(t5_xs, t5_ys, color=col, line_width=wd)
+trip5 = p_psrc.line(t5_xs, t5_ys, color=col, line_width=wd)
 trip6 = p_psrc.line(t6_xs, t6_ys, color=col, line_width=wd)
-trip7 = p_psrc.circle(t7_xs, t7_ys, color=col, line_width=wd)
+trip7 = p_psrc.line(t7_xs, t7_ys, color=col, line_width=wd)
 trip8 = p_psrc.line(t8_xs, t8_ys, color=col, line_width=wd)
 trip9 = p_psrc.line(t9_xs, t9_ys, color=col, line_width=wd)
 trip10 = p_psrc.line(t10_xs, t10_ys, color=col, line_width=wd)
-trip11 = p_psrc.circle(t11_xs, t11_ys, color=col, line_width=wd)
+trip11 = p_psrc.line(t11_xs, t11_ys, color=col, line_width=wd)
 trip12 = p_psrc.line(t12_xs, t12_ys, color=col, line_width=wd)
-trip13 = p_psrc.circle(t13_xs, t13_ys, color=col, line_width=wd)
+trip13 = p_psrc.line(t13_xs, t13_ys, color=col, line_width=wd)
 trip14 = p_psrc.line(t14_xs, t14_ys, color=col, line_width=wd)
 trip15 = p_psrc.line(t15_xs, t15_ys, color=col, line_width=wd)
 trip16 = p_psrc.line(t16_xs, t16_ys, color=col, line_width=wd)
 trip17 = p_psrc.line(t17_xs, t17_ys, color=col, line_width=wd)
 trip18 = p_psrc.line(t18_xs, t18_ys, color=col, line_width=wd)
-trip19 = p_psrc.circle(t19_xs, t19_ys, color=col, line_width=wd)
-trip20 = p_psrc.circle(t20_xs, t20_ys, color=col, line_width=wd)
+trip19 = p_psrc.line(t19_xs, t19_ys, color=col, line_width=wd)
+trip20 = p_psrc.line(t20_xs, t20_ys, color=col, line_width=wd)
 trip21 = p_psrc.line(t21_xs, t21_ys, color=col, line_width=wd)
 trip22 = p_psrc.line(t22_xs, t22_ys, color=col, line_width=wd)
 trip23 = p_psrc.circle(t23_xs, t23_ys, color=col, line_width=wd)
@@ -338,13 +238,15 @@ trip23 = p_psrc.circle(t23_xs, t23_ys, color=col, line_width=wd)
 
 checkbox_psrc = CheckboxGroup(labels=used_zips)
 
-checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2, l3=trip3,
-                                       l4=trip4, l5=trip5, l6=trip6, l7=trip7, l8=trip8,
-                                       l9=trip9, l10=trip10, l11=trip11, l12=trip12,
-                                       l13=trip13, l14=trip14, l15=trip15, l16=trip16,
-                                       l17=trip17, l18=trip18, l19=trip19, l20=trip20,
-                                       l21=trip21, l22=trip22, l23=trip23 ),
-                             code="""
+checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
+                                    l3=trip3, l4=trip4, l5=trip5, l6=trip6,
+                                    l7=trip7, l8=trip8, l9=trip9, l10=trip10,
+                                    l11=trip11, l12=trip12, l13=trip13,
+                                    l14=trip14, l15=trip15, l16=trip16,
+                                    l17=trip17, l18=trip18, l19=trip19,
+                                    l20=trip20, l21=trip21, l22=trip22,
+                                    l23=trip23 ),
+                                    code="""
     //console.log(cb_obj.active);
     l0.visible = false;
     l1.visible = false;
@@ -479,8 +381,13 @@ checkbox_psrc_code = """
         }
     }
 """
+para_psrc = Paragraph(text="""Network Map of Seattle Travel. For each zipcode,
+a line from the selected zipcode conects to the most frequent destination
+zipcodes. A dot representsthat the most frequent trips were within
+the same zipcode.""",
+width=200, height=100)
 
-layout_psrc = row(p_psrc, widgetbox(checkbox_psrc))
+layout_psrc = row(p_psrc, widgetbox(checkbox_psrc,para_psrc))
 #outfp_psrc = r"../examples/trip_map.html"
 #output_file(outfp_psrc, title = "Trip Map", mode= 'cdn', root_dir=None)
 #show(layout_psrc)
@@ -691,7 +598,7 @@ code ="""
     l27.visible = false;
     l28.visible = false;
     l29.visible = false;
-   
+
 
     for (i in cb_obj.active) {
         //console.log(cb_obj.active[i]);
@@ -755,7 +662,7 @@ code ="""
             l28.visible = true;
         } else if (cb_obj.active[i] == 29) {
             l29.visible = true;
-       
+
 
         }
     }
@@ -765,7 +672,8 @@ code ="""
 color_mapper = LogColorMapper(palette=palette)
 
 #Defining the figure
-p = figure(title="Seattle Bus Routes",tools=TOOLS,x_range=(-122.5, -122.1),y_range=(47.46, 47.8))
+p = figure(title="Seattle Bus Routes",tools=TOOLS,x_range=(-122.5, -122.1),
+                y_range=(47.46, 47.8))
 
 # Plot grid with income as base colors
 grid2 = p.patches('x', 'y', source=gsource,
@@ -815,16 +723,26 @@ ghover.tooltips=[("zip code", "@GEOID10")]
 p.add_tools(ghover)
 
 #Defining checkbox
-checkbox = CheckboxGroup(labels=list(zips_sea['zip'][0:30].astype(str)), active= [])
-checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3,l4=r4, l5=r5, l6=r6, l7=r7, l8=r8,l9=r9,l10=r10,l11=r11,
-                               l12=r12,l13=r13,l14=r14,l15=r15,l16=r16,l17=r17,l18=r18,l19=r19,l20=r20,l21=r21,
-                                      l22=r22,l23=r23,l24=r24,l25=r25,l26=r26,l27=r27,l28=r28,l29=r29),
-                             code=code )
+checkbox = CheckboxGroup(labels=list(zips_sea['zip'][0:30].astype(str)),
+                            active= [])
+checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3,l4=r4,
+                                l5=r5, l6=r6, l7=r7, l8=r8,l9=r9,l10=r10,
+                                l11=r11, l12=r12, l13=r13, l14=r14, l15=r15,
+                                l16=r16, l17=r17, l18=r18,l19=r19, l20=r20,
+                                l21=r21, l22=r22, l23=r23, l24=r24, l25=r25,
+                                l26=r26, l27=r27, l28=r28, l29=r29),
+                                code=code )
+
+para_routes = Paragraph(text="""Map of Bus Routes and Seattle Income
+Brackets. Specifying a zipcode from the checkbox list displays the bus routes
+that service the specified zipcode.
+""",
+width=200, height=100)
 
 group = widgetbox(checkbox)
 
-layout = row(p, widgetbox(checkbox) ,p_psrc, widgetbox(checkbox_psrc))
+layout = row(p, widgetbox(checkbox,para_routes), p_psrc, widgetbox(checkbox_psrc, para_psrc))
 
 outfp = r"../examples/transit_map.html"
-output_file(outfp , title='Bokeh Plot', mode='cdn', root_dir=None)
+output_file(outfp , title='Transit Trackers', mode='cdn', root_dir=None)
 show(layout)
