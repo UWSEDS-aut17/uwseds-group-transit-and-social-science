@@ -200,7 +200,7 @@ g_df_psrc = grid.drop('geometry', axis=1).copy()
 gsource_psrc = ColumnDataSource(g_df_psrc)
 output_notebook()
 
-TOOLS = "pan,wheel_zoom,reset,poly_select,box_select,tap,box_zoom"
+TOOLS = "pan,wheel_zoom,reset,poly_select,box_select,tap,box_zoom,save"
 p_psrc = figure(title="Most Frequent Destinations by Zipcode",tools=TOOLS,x_range=(-122.5, -122.1),y_range=(47.46, 47.8))
 
 # Plot grid
@@ -237,8 +237,8 @@ trip21 = p_psrc.line(t21_xs, t21_ys, color=col, line_width=wd)
 trip22 = p_psrc.line(t22_xs, t22_ys, color=col, line_width=wd)
 trip23 = p_psrc.line(t23_xs, t23_ys, color=col, line_width=wd)
 trip24 = p_psrc.line(t24_xs, t24_ys, color=col, line_width=wd)
-trip25 = p_prsc.line(t25_xs, t25_ys, color=col, line_width=wd)
-trip26 = p_prsc.line(t26_xs, t26_ys, color=col, line_width=wd)
+trip25 = p_psrc.line(t25_xs, t25_ys, color=col, line_width=wd)
+trip26 = p_psrc.line(t26_xs, t26_ys, color=col, line_width=wd)
 
 checkbox_psrc = CheckboxGroup(labels=used_zips)
 
@@ -340,77 +340,12 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
         }
     }
 """)
-checkbox_psrc_code = """
-    for (i in cb_obj.active) {
-        //console.log(cb_obj.active[i]);
-        if (cb_obj.active[i] == 0) {
-            l0.visible = true;
-        } else if (cb_obj.active[i] == 1) {
-            l1.visible = true;
-        } else if (cb_obj.active[i] == 2) {
-            l2.visible = true;
-        } else if (cb_obj.active[i] == 3) {
-            l3.visible = true;
-        } else if (cb_obj.active[i] == 4) {
-            l4.visible = true;
-        } else if (cb_obj.active[i] == 5) {
-            l5.visible = true;
-        } else if (cb_obj.active[i] == 6) {
-            l6.visible = true;
-        } else if (cb_obj.active[i] == 7) {
-            l7.visible = true;
-        } else if (cb_obj.active[i] == 8) {
-            l8.visible = true;
-        } else if (cb_obj.active[i] == 9) {
-            l9.visible = true;
-        } else if (cb_obj.active[i] == 10) {
-            l10.visible = true;
-        } else if (cb_obj.active[i] == 11) {
-            l11.visible = true;
-        } else if (cb_obj.active[i] == 12) {
-            l12.visible = true;
-        } else if (cb_obj.active[i] == 13) {
-            l13.visible = true;
-        } else if (cb_obj.active[i] == 14) {
-            l14.visible = true;
-        } else if (cb_obj.active[i] == 15) {
-            l15.visible = true;
-        } else if (cb_obj.active[i] == 16) {
-            l16.visible = true;
-        } else if (cb_obj.active[i] == 17) {
-            l17.visible = true;
-        } else if (cb_obj.active[i] == 18) {
-            l18.visible = true;
-        } else if (cb_obj.active[i] == 19) {
-            l19.visible = true;
-        } else if (cb_obj.active[i] == 20) {
-            l20.visible = true;
-        } else if (cb_obj.active[i] == 21) {
-            l21.visible = true;
-        } else if (cb_obj.active[i] == 22) {
-            l22.visible = true;
-        } else if (cb_obj.active[i] == 23) {
-            l23.visible = true;
-        } else if (cb_obj.active[i] == 24) {
-            l24.visible = true;
-        } else if (cb_obj.active[i] == 25) {
-            l25.visible = true;
-        } else if (cb_obj.active[i] == 26) {
-            l26.visible = true;
-        }
-    }
-"""
+
 para_psrc = Paragraph(text="""Network Map of Seattle Travel. For each zipcode,
 a line from the selected zipcode conects to the most frequent destination
 zipcodes. A dot representsthat the most frequent trips were within
 the same zipcode.""",
 width=200, height=100)
-
-layout_psrc = row(p_psrc, widgetbox(checkbox_psrc,para_psrc))
-#outfp_psrc = r"../examples/trip_map.html"
-#output_file(outfp_psrc, title = "Trip Map", mode= 'cdn', root_dir=None)
-#show(layout_psrc)
-
 
 #Seattle Transit Mapping
 
@@ -681,8 +616,6 @@ code ="""
             l28.visible = true;
         } else if (cb_obj.active[i] == 29) {
             l29.visible = true;
-
-
         }
     }
 """
@@ -760,7 +693,104 @@ width=200, height=100)
 
 group = widgetbox(checkbox)
 
-layout = row(p, widgetbox(checkbox,para_routes), p_psrc, widgetbox(checkbox_psrc, para_psrc))
+df_person = pd.read_excel('../Data/socio_eco.xlsx')
+
+Sea_df = df_person[(df_person['h_city'] == 'SEATTLE')]
+ddf = Sea_df[['h_zip', 'h_city', 'age', 'relationship', 'gender',
+              'employment', 'worker', 'education']]
+
+df = ddf.dropna(how='any')
+
+df['h_zip'] = df.h_zip.astype(int)
+df['employment'] = df.employment.astype(int)
+df['education'] = df.education.astype(int)
+
+df['age_scaled'] = df['age']
+df['edu_scaled'] = df['education']
+df.loc[df['age'] == 1, 'age_scaled'] = 'Under 5'
+df.loc[df['age'] == 2, 'age_scaled'] = '5-11'
+df.loc[df['age'] == 3, 'age_scaled'] = '12-15'
+df.loc[df['age'] == 4, 'age_scaled'] = '16-17'
+df.loc[df['age'] == 5, 'age_scaled'] = '18-24'
+df.loc[df['age'] == 6, 'age_scaled'] = '25-34'
+df.loc[df['age'] == 7, 'age_scaled'] = '35-44'
+df.loc[df['age'] == 8, 'age_scaled'] = '45-54'
+df.loc[df['age'] == 9, 'age_scaled'] = '55-64'
+df.loc[df['age'] == 10, 'age_scaled'] = '65-74'
+df.loc[df['age'] == 11, 'age_scaled'] = '75-84'
+df.loc[df['age'] == 12, 'age_scaled'] = '85 or older'
+df.loc[df['education'] == 1, 'edu_scaled'] = 'Less than High School'
+df.loc[df['education'] == 2, 'edu_scaled'] = 'High School'
+df.loc[df['education'] == 3, 'edu_scaled'] = 'Some College'
+df.loc[df['education'] == 4, 'edu_scaled'] = 'Vocational/Technical Training'
+df.loc[df['education'] == 5, 'edu_scaled'] = 'Associates Degree'
+df.loc[df['education'] == 6, 'edu_scaled'] = 'Bachelor Degree'
+df.loc[df['education'] == 7, 'edu_scaled'] = 'Graduate/Post-Graduate Degree'
+
+age_group = df.groupby(['h_zip'])['age_scaled'].value_counts().to_frame()
+edu_group = df.groupby(['h_zip'])['edu_scaled'].value_counts().to_frame()
+age_group.to_csv('./age_grouped.csv')
+edu_group.to_csv('./edu_grouped.csv')
+
+age_group = pd.read_csv('./age_grouped.csv')
+edu_group = pd.read_csv('./edu_grouped.csv')
+age_group = age_group.rename(index=str, columns={'age_scaled.1':'age_counts'})
+edu_group = edu_group.rename(index=str, columns={'edu_scaled.1':'edu_counts'})
+
+age_scale = {}
+edu_scale = {}
+age_count = {}
+edu_count = {}
+for i in used_zips:
+    age_scale[i] = age_group.query('h_zip ==' + i)['age_scaled'].tolist()
+    age_count[i] = age_group.query('h_zip ==' + i)['age_counts'].tolist()
+    edu_scale[i] = edu_group.query('h_zip ==' + i)['edu_scaled'].tolist()
+    edu_count[i] = edu_group.query('h_zip ==' + i)['edu_counts'].tolist()
+
+age_x = age_scale['98102']
+age_y = age_count['98102']
+edu_x = edu_scale['98102']
+edu_y = edu_count['98102']
+
+age_data_CDS = ColumnDataSource(data = age_scale)
+age_count_CDS = ColumnDataSource(data = age_count)
+age_data_zip = {'x': age_x,'y': age_y}
+age_plot_data = ColumnDataSource(data=age_data_zip)
+edu_data_CDS = ColumnDataSource(data=edu_scale)
+edu_count_CDS = ColumnDataSource(data=edu_count)
+edu_data_zip = {'x': edu_x,'y': edu_y}
+edu_plot_data = ColumnDataSource(data=edu_data_zip)
+
+age_plot = figure(title ='Age Distribution by Zipcode',plot_width=400, plot_height=400,x_range=age_x)
+age_plot.vbar(x = 'x',top = 'y',source=age_plot_data, width = .5, color = 'firebrick')
+edu_plot = figure(title = 'Education Distribution by Zipcode',plot_width=400, plot_height=400,x_range=edu_x)
+edu_plot.vbar(x = 'x',top = 'y',source=edu_plot_data,width = 0.5, color = 'firebrick')
+edu_plot.xaxis.major_label_orientation = math.pi/3
+
+select = Select(title='Zipcode', value='98102',options = used_zips)
+
+callback = CustomJS(args={'source1':age_plot_data,'source2':age_data_CDS,'source3':age_count_CDS,
+                         'source4':edu_plot_data,'source5':edu_data_CDS,'source6':edu_count_CDS}, code="""
+        var age_plot_data = source1.data;
+        var age_scale_data = source2.data;
+        var age_count_data = source3.data;
+        var edu_plot_data = source4.data;
+        var edu_scale_data = source5.data;
+        var edu_count_data = source6.data;
+        var f = cb_obj.value
+        for (var e in age_plot_data) delete age_plot_data[e];
+        age_plot_data['x'] = age_scale_data[f]
+        age_plot_data['y'] = age_count_data[f]
+        for (var e in edu_plot_data) delete edu_plot_data[e];
+        edu_plot_data['x'] = edu_scale_data[f]
+        edu_plot_data['y'] = edu_count_data[f]
+        source1.change.emit();
+        source4.change.emit();
+    """)
+
+select.js_on_change('value',callback)
+
+layout = gridplot([p, widgetbox(checkbox,para_routes)], [p_psrc, widgetbox(checkbox_psrc, para_psrc)],[age_plot,edu_plot,widgetbox(select)])
 
 outfp = r"../examples/transit_map.html"
 output_file(outfp , title='Transit Trackers', mode='cdn', root_dir=None)
