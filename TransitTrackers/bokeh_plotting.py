@@ -693,9 +693,25 @@ width=200, height=100)
 
 group = widgetbox(checkbox)
 
-df_person = pd.read_excel('../Data/socio_eco.xlsx')
+#Begin processing socioeconomic data
 
-Sea_df = df_person[(df_person['h_city'] == 'SEATTLE')]
+
+#Read in data from the households and persons sheets
+household_df = pd.read_excel('../Data/2014-pr3-hhsurvey-households.xlsx')
+persons_df = pd.read_excel('../Data/2014-pr3-hhsurvey-persons.xlsx')
+
+#Add household data required to persons_df
+hh_zip = []
+hh_city = []
+#for i in range(0,len(household_df['hhid'])):
+for i in range(0,len(persons_df['hhid'])):
+    hh_zip.extend(household_df.query('hhid ==' + str(persons_df['hhid'][i]))['h_zip'])
+    hh_city.extend(household_df.query('hhid ==' + str(persons_df['hhid'][i]))['h_city'])
+
+persons_df['h_zip'] = hh_zip
+persons_df['h_city'] =hh_city
+
+Sea_df = persons_df[(df_person['h_city'] == 'SEATTLE')]
 ddf = Sea_df[['h_zip', 'h_city', 'age', 'relationship', 'gender',
               'employment', 'worker', 'education']]
 
