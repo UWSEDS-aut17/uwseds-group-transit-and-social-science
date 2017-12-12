@@ -11,7 +11,7 @@ https://www.psrc.org/household-travel-survey-program
 
 The user runs the analysis by typing in the command line:
 
-"python transittracker.py"
+"python transit_tracker.py"
 
 This will output four plots to an html where the user can interact with maps
 and bar charts for personalized analysis of the data. Running this
