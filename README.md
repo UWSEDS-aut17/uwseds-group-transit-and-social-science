@@ -1,5 +1,5 @@
 # Improving Public Transportation
-![Transit Trackers Logo](/Images/transittrackers.png = 100x)
+![Transit Trackers Logo](/Images/transittrackers.png =100x)
 
 
 Our group is primarily concerned with the issues of transportation in the city
@@ -17,11 +17,11 @@ plots are shown in figures 1 and 2, below. The user can visualize bus routes
 that serve a specific zip code and the PSRC travel trends from individuals
 traveling in the 98133 zip code.
 
-![Bus Routes](/Images/routes.png = 100x)
+![Bus Routes](/Images/routes.png =100x)
 
 Figure 1.
 
-![PSRC Trends](/Images/trends.png = 100x)
+![PSRC Trends](/Images/trends.png =100x)
 
 Figure 2.
 
@@ -30,11 +30,11 @@ to show the overall counts of age demographics and education levels by the
 chosen zip code. Figures 3 and 4 show examples of these charts for the 98133
 zip code.
 
-![Age Plot](/Images/age.png = 100x)
+![Age Plot](/Images/age.png =100x)
 
 Figure 3.
 
-![Edu Plot](/Images/edu.png = 100x)
+![Edu Plot](/Images/edu.png =100x)
 
 Figure 4.
 
