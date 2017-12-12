@@ -1,5 +1,5 @@
 # Improving Public Transportation
-<img src="/Images/transittrackers.png" alt="Drawing" style="width: 50px;"/>
+<img src="/Images/transittrackers.png" alt="Drawing" height="12" width="12"/>
 
 Our group is primarily concerned with the issues of transportation in the city
 of Seattle. With the city growing at an alarming rate, there are inevitably
