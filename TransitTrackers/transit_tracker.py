@@ -179,7 +179,7 @@ used_zips = ['98101','98102','98103','98104','98105','98106','98107',
 
 
 #Assign grid from Seattle zips shapefile
-grid_fp = r"../Data/zips_sea2/shp1.shp"
+grid_fp = r"../Data/zips_sea/shp.shp"
 
 #Shapefile of bus routes of Seattle
 network_fp = r"../Data/bus_seattle/network.shp"
@@ -416,125 +416,129 @@ for c in range(0,30):
     f = f + zips_sea['count'][c].astype(int)
 
 #Extracting bus routes for each zip code
-network0 = network.loc[network.ROUTE_NUM.isin(routes[0]) , :]
+
+
+network0 = network.loc[network.OBJECTID.isin(routes[0]) , :]
 network0['zip'] = zips_sea.zip[0]
 ns0 = GeoJSONDataSource(geojson=network0.to_json())
 
-network1 = network.loc[network.ROUTE_NUM.isin(routes[1]) , :]
+network1 = network.loc[network.OBJECTID.isin(routes[1]) , :]
 network1['zip'] = zips_sea.zip[1]
 ns1 = GeoJSONDataSource(geojson=network1.to_json())
 
-network2 = network.loc[network.ROUTE_NUM.isin(routes[2]) , :]
+network2 = network.loc[network.OBJECTID.isin(routes[2]) , :]
 network2['zip'] = zips_sea.zip[2]
 ns2 = GeoJSONDataSource(geojson=network2.to_json())
 
-network3 = network.loc[network.ROUTE_NUM.isin(routes[3]) , :]
+network3 = network.loc[network.OBJECTID.isin(routes[3]) , :]
 network3['zip'] = zips_sea.zip[3]
 ns3 = GeoJSONDataSource(geojson=network3.to_json())
 
-network4 = network.loc[network.ROUTE_NUM.isin(routes[4]) , :]
+network4 = network.loc[network.OBJECTID.isin(routes[4]) , :]
 network4['zip'] = zips_sea.zip[4]
 ns4 = GeoJSONDataSource(geojson=network4.to_json())
 
-network5 = network.loc[network.ROUTE_NUM.isin(routes[5]) , :]
+network5 = network.loc[network.OBJECTID.isin(routes[5]) , :]
 network5['zip'] = zips_sea.zip[5]
 ns5 = GeoJSONDataSource(geojson=network5.to_json())
 
-network6 = network.loc[network.ROUTE_NUM.isin(routes[6]) , :]
+network6 = network.loc[network.OBJECTID.isin(routes[6]) , :]
 network6['zip'] = zips_sea.zip[6]
 ns6 = GeoJSONDataSource(geojson=network6.to_json())
 
-network7 = network.loc[network.ROUTE_NUM.isin(routes[7]) , :]
+network7 = network.loc[network.OBJECTID.isin(routes[7]) , :]
 network7['zip'] = zips_sea.zip[7]
 ns7 = GeoJSONDataSource(geojson=network7.to_json())
 
-network8 = network.loc[network.ROUTE_NUM.isin(routes[8]) , :]
+network8 = network.loc[network.OBJECTID.isin(routes[8]) , :]
 network8['zip'] = zips_sea.zip[8]
 ns8 = GeoJSONDataSource(geojson=network8.to_json())
 
-network9 = network.loc[network.ROUTE_NUM.isin(routes[9]) , :]
+network9 = network.loc[network.OBJECTID.isin(routes[9]) , :]
 network9['zip'] = zips_sea.zip[9]
 ns9 = GeoJSONDataSource(geojson=network9.to_json())
 
-network10 = network.loc[network.ROUTE_NUM.isin(routes[10]) , :]
+network10 = network.loc[network.OBJECTID.isin(routes[10]) , :]
 network10['zip'] = zips_sea.zip[10]
 ns10 = GeoJSONDataSource(geojson=network10.to_json())
 
-network11 = network.loc[network.ROUTE_NUM.isin(routes[11]) , :]
+network11 = network.loc[network.OBJECTID.isin(routes[11]) , :]
 network11['zip'] = zips_sea.zip[11]
 ns11 = GeoJSONDataSource(geojson=network11.to_json())
 
-network12 = network.loc[network.ROUTE_NUM.isin(routes[12]) , :]
+network12 = network.loc[network.OBJECTID.isin(routes[12]) , :]
 network12['zip'] = zips_sea.zip[12]
 ns12 = GeoJSONDataSource(geojson=network12.to_json())
 
-network13 = network.loc[network.ROUTE_NUM.isin(routes[13]) , :]
+network13 = network.loc[network.OBJECTID.isin(routes[13]) , :]
 network13['zip'] = zips_sea.zip[13]
 ns13 = GeoJSONDataSource(geojson=network13.to_json())
 
-network14 = network.loc[network.ROUTE_NUM.isin(routes[14]) , :]
+network14 = network.loc[network.OBJECTID.isin(routes[14]) , :]
 network14['zip'] = zips_sea.zip[14]
 ns14 = GeoJSONDataSource(geojson=network14.to_json())
 
-network15 = network.loc[network.ROUTE_NUM.isin(routes[15]) , :]
+network15 = network.loc[network.OBJECTID.isin(routes[15]) , :]
 network15['zip'] = zips_sea.zip[15]
 ns15 = GeoJSONDataSource(geojson=network15.to_json())
 
-network16 = network.loc[network.ROUTE_NUM.isin(routes[16]) , :]
+network16 = network.loc[network.OBJECTID.isin(routes[16]) , :]
 network16['zip'] = zips_sea.zip[16]
 ns16 = GeoJSONDataSource(geojson=network16.to_json())
 
-network17 = network.loc[network.ROUTE_NUM.isin(routes[17]) , :]
+network17 = network.loc[network.OBJECTID.isin(routes[17]) , :]
 network17['zip'] = zips_sea.zip[17]
 ns17 = GeoJSONDataSource(geojson=network17.to_json())
 
-network18 = network.loc[network.ROUTE_NUM.isin(routes[18]) , :]
+network18 = network.loc[network.OBJECTID.isin(routes[18]) , :]
 network18['zip'] = zips_sea.zip[18]
 ns18 = GeoJSONDataSource(geojson=network18.to_json())
 
-network19 = network.loc[network.ROUTE_NUM.isin(routes[19]) , :]
+network19 = network.loc[network.OBJECTID.isin(routes[19]) , :]
 network19['zip'] = zips_sea.zip[19]
 ns19 = GeoJSONDataSource(geojson=network19.to_json())
 
-network20 = network.loc[network.ROUTE_NUM.isin(routes[20]) , :]
+network20 = network.loc[network.OBJECTID.isin(routes[20]) , :]
 network20['zip'] = zips_sea.zip[20]
 ns20 = GeoJSONDataSource(geojson=network20.to_json())
 
-network21 = network.loc[network.ROUTE_NUM.isin(routes[21]) , :]
+network21 = network.loc[network.OBJECTID.isin(routes[21]) , :]
 network21['zip'] = zips_sea.zip[21]
 ns21 = GeoJSONDataSource(geojson=network21.to_json())
 
-network22 = network.loc[network.ROUTE_NUM.isin(routes[22]) , :]
+network22 = network.loc[network.OBJECTID.isin(routes[22]) , :]
 network22['zip'] = zips_sea.zip[22]
 ns22 = GeoJSONDataSource(geojson=network20.to_json())
 
-network23 = network.loc[network.ROUTE_NUM.isin(routes[23]) , :]
+network23 = network.loc[network.OBJECTID.isin(routes[23]) , :]
 network23['zip'] = zips_sea.zip[23]
 ns23 = GeoJSONDataSource(geojson=network23.to_json())
 
-network24 = network.loc[network.ROUTE_NUM.isin(routes[24]) , :]
+network24 = network.loc[network.OBJECTID.isin(routes[24]) , :]
 network24['zip'] = zips_sea.zip[24]
 ns24 = GeoJSONDataSource(geojson=network24.to_json())
 
-network25 = network.loc[network.ROUTE_NUM.isin(routes[25]) , :]
+network25 = network.loc[network.OBJECTID.isin(routes[25]) , :]
 network25['zip'] = zips_sea.zip[25]
 ns25 = GeoJSONDataSource(geojson=network25.to_json())
 
-network26 = network.loc[network.ROUTE_NUM.isin(routes[26]) , :]
+network26 = network.loc[network.OBJECTID.isin(routes[26]) , :]
 network26['zip'] = zips_sea.zip[26]
 ns26 = GeoJSONDataSource(geojson=network26.to_json())
 
-network27 = network.loc[network.ROUTE_NUM.isin(routes[27]) , :]
+network27 = network.loc[network.OBJECTID.isin(routes[27]) , :]
 network27['zip'] = zips_sea.zip[27]
 ns27 = GeoJSONDataSource(geojson=network27.to_json())
 
-network28 = network.loc[network.ROUTE_NUM.isin(routes[28]) , :]
+network28 = network.loc[network.OBJECTID.isin(routes[28]) , :]
 network28['zip'] = zips_sea.zip[28]
 ns28 = GeoJSONDataSource(geojson=network28.to_json())
 
-network29 = network.loc[network.ROUTE_NUM.isin(routes[29]) , :]
+network29 = network.loc[network.OBJECTID.isin(routes[29]) , :]
 network29['zip'] = zips_sea.zip[29]
 ns29 = GeoJSONDataSource(geojson=network29.to_json())
+
+
 
 
 
@@ -574,106 +578,17 @@ g_df = grid.drop('geometry', axis=1).copy()
 gsource = ColumnDataSource(g_df)
 
 # Javascript code to be inputed in CustomJS for checkbox widget
+N_plots = range(len(zips_sea))
 
-code ="""
-    //console.log(cb_obj.active);
-    l0.visible = false;
-    l1.visible = false;
-    l2.visible = false;
-    l3.visible = false;
-    l4.visible = false;
-    l5.visible = false;
-    l6.visible = false;
-    l7.visible = false;
-    l8.visible = false;
-    l9.visible = false;
-    l10.visible = false;
-    l11.visible = false;
-    l12.visible = false;
-    l13.visible = false;
-    l14.visible = false;
-    l15.visible = false;
-    l16.visible = false;
-    l17.visible = false;
-    l18.visible = false;
-    l19.visible = false;
-    l20.visible = false;
-    l21.visible = false;
-    l22.visible = false;
-    l23.visible = false;
-    l24.visible = false;
-    l25.visible = false;
-    l26.visible = false;
-    l27.visible = false;
-    l28.visible = false;
-    l29.visible = false;
+def js_code (N_plots):
+    part1 = ''.join(['\n l'+str(i)+'.visible = '+'false;' for i in N_plots])
+    part2 = ''.join(['\n if (cb_obj.active[i] == '+str(i)+')'+'{l'+str(i)+'.visible = '+'true;' +  '} else ' for i in N_plots])
+    if part2.endswith('else '):
+        part2 = part2[:-5]
+    checkbox_code = '//console.log(cb_obj.active); '+ part1 + """for (i in cb_obj.active) {//console.log(cb_obj.active[i]);""" + part2 + """}""" 
+    return (checkbox_code)
 
-
-    for (i in cb_obj.active) {
-        //console.log(cb_obj.active[i]);
-        if (cb_obj.active[i] == 0) {
-            l0.visible = true;
-        } else if (cb_obj.active[i] == 1) {
-            l1.visible = true;
-        } else if (cb_obj.active[i] == 2) {
-            l2.visible = true;
-        } else if (cb_obj.active[i] == 3) {
-            l3.visible = true;
-        } else if (cb_obj.active[i] == 4) {
-            l4.visible = true;
-        } else if (cb_obj.active[i] == 5) {
-            l5.visible = true;
-        } else if (cb_obj.active[i] == 6) {
-            l6.visible = true;
-        } else if (cb_obj.active[i] == 7) {
-            l7.visible = true;
-        } else if (cb_obj.active[i] == 8) {
-            l8.visible = true;
-        } else if (cb_obj.active[i] == 9) {
-            l9.visible = true;
-        } else if (cb_obj.active[i] == 10) {
-            l10.visible = true;
-        } else if (cb_obj.active[i] == 11) {
-            l11.visible = true;
-        } else if (cb_obj.active[i] == 12) {
-            l12.visible = true;
-        } else if (cb_obj.active[i] == 13) {
-            l13.visible = true;
-        } else if (cb_obj.active[i] == 14) {
-            l14.visible = true;
-        } else if (cb_obj.active[i] == 15) {
-            l15.visible = true;
-        } else if (cb_obj.active[i] == 16) {
-            l16.visible = true;
-        } else if (cb_obj.active[i] == 17) {
-            l17.visible = true;
-        } else if (cb_obj.active[i] == 18) {
-            l18.visible = true;
-        } else if (cb_obj.active[i] == 19) {
-            l19.visible = true;
-        } else if (cb_obj.active[i] == 20) {
-            l20.visible = true;
-        } else if (cb_obj.active[i] == 21) {
-            l21.visible = true;
-        } else if (cb_obj.active[i] == 22) {
-            l22.visible = true;
-        } else if (cb_obj.active[i] == 23) {
-            l23.visible = true;
-        } else if (cb_obj.active[i] == 24) {
-            l24.visible = true;
-        } else if (cb_obj.active[i] == 25) {
-            l25.visible = true;
-        } else if (cb_obj.active[i] == 26) {
-            l26.visible = true;
-        } else if (cb_obj.active[i] == 27) {
-            l27.visible = true;
-        } else if (cb_obj.active[i] == 28) {
-            l28.visible = true;
-        } else if (cb_obj.active[i] == 29) {
-            l29.visible = true;
-        }
-    }
-"""
+checkbox_code = js_code (N_plots)
 
 #Generating colors for identifying income on map
 color_mapper = LogColorMapper(palette=palette)
@@ -738,7 +653,7 @@ checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3,l4=r4,
                                 l16=r16, l17=r17, l18=r18,l19=r19, l20=r20,
                                 l21=r21, l22=r22, l23=r23, l24=r24, l25=r25,
                                 l26=r26, l27=r27, l28=r28, l29=r29),
-                                code=code )
+                                code=checkbox_code )
 
 para_routes = Paragraph(text="""Map of Bus Routes and Seattle Income
 Brackets. Specifying a zipcode from the checkbox list displays the bus routes
