@@ -1,85 +1,71 @@
 # Component Design
 
 * Component list
-  - Database of public transportation routes and stops by location
-  - Database of socioeconomic and trips by location
-  - Map of routes and stops
-  - Visualization of socioeconomic data through graph and heatmap
+  - Database of public transportation routes
+  - Database of socioeconomic factors and trips
+  - Map of routes and travel trends
+  - Visualization of socioeconomic data through bar charts
 
 * Component specifications
-  - Database of public transportation routes and stops by location
+  - Database of public transportation routes
     - What it does
-       - Takes a location from the map and creates dataframes that contains what buses routes and stops
-         are closest and the path of the bus route
+       - Takes a zip code and creates dataframes that contain what bus routes
+         serve that zip code and shows the path of the bus route
     - Name
-       - gtfs_utils.py
+       - Processing and plotting run in transittrackers.py
     - Inputs
-       - Census tracked location as specified by click on map
+       - Routes from KCM for Seattle specific routes
+       - Zip Codes in Seattle
     - Outputs
-       - Dataframes of bus route paths, stop locations and information about bus stop frequency
-    - Pseudo code
-       - get_busdata(census_track_id)
-         using latitutde and longitude data, find bus route ids within that census track
-         use bus route ids to determine stop locations (lat, long)
-         use bus route ids to determine bus route path (lat, long)
-         group all lat and long data into a dataframe that is the output
+       - Dataframes of bus route paths
 
 
-  - Database of socioeconomic and trips by location
+  - Database of socioeconomic factors and trips
     - What it does
-        - This component is a database of the information on households and individuals characterestics and their trips diary. We use this data to present socioeconomic information (e.g. average income, age, education, etc) and trip frequency for a zone, selected by the user.
+        - Present socioeconomic information and trip trends for a zip code,
+          selected by the user.
     - Name
-        - psrc_data.py which is a Python script to clean and aggregate data for all the census tracts in King County.
+        - Processing and plotting run in transittrackers.py
     - Inputs
-        - Census tract IDs in King County, which will be used to aggregate the data based on it.
+        - Data from PSRC travel survey
+        - Zip Codes in Seattle
     - Outputs
-        - The output of this component is two dataframe of aggregated socioeconomic characteristics of travellers in each census tract, and their trip destinations.
-    - Pseudo code
-	    - get_psrc_data(census_track_id)
-		  using census_tract_id to find all the people starting a trip in that tract
-		  aggregate socioeconomic data on trip_origin equal to census_tract_id
-		  aggregate trip_destinations based on trip_origin equal to census_tract_id
-          output a dataframe of aggregate data and 		  
-		  
-		  
-	
-	
-  - Map of routes and stops
+        - Dataframes of travel trends from each zip code, and grouped
+          socieoeconomic data by zip code.		  
+
+  - Map of routes and travel trends
     - What it does
-      - This component will be used to visualize current transit trend data in King
-      County so that it can be compared with PSRC survey data.
-      It will serve as the base metric for all of our analysis by understanding what
-      areas are over-or-underserved with the current implementations.
+      - This component will be used to visualize current transit trend data in
+        Seattle so that it can be compared with PSRC survey data.
+        It will serve as the base metric for all of our analysis by
+        understanding what areas are over-or-underserved with the current
+        implementations.
     - Name
-      - gtfs_utils.py
+      - Processing and plotting run in transitrackers.py
     - Inputs
-      - OneBusAway DataFrames for stops, trips, shapes, and routes. Columns involve
-      specific IDs that relate to that specific DF, and also correlate to the other
-      DFs for reference.
+      - OneBusAway DataFrames for route shapes and routes. Columns involve
+      specific IDs that relate to that specific DF, and also correlate to the
+      other DFs for reference.
       - Map with zip code outlines for visualization.
     - Outputs
-      - An interactive map that will be updated based on the inputs from the user.
+      - An interactive map that will be updated based on the zip code choices
+        from the user.
     - How it works
-      - Get all route, stop, trip, and shape data from the OneBusAway DataFrames.
-      - Create a map with zip code differentiation that can be used to overlay the
-      bus data.
+      - Get all route, stop, trip, and shape data from the OneBusAway
+      - Create a map with zip code differentiation that can be used to compare
+        to the bus data.
       - Add the OneBusAway data and group by the location of interest
-      - With grouping in pandas we should be able to interactively update the map
-      based on the user inputs.
 
-  - Visualization of the socioeconomic data through graph and heatmap
+  - Visualization of the socioeconomic data through bar charts
     - What it does
-      - Visualization of the socioeconomic data through graph and heatmap.
-      The user will be able to easily view the socioeconomic behavior by regions
+      - Visualization of the socioeconomic data through bar graphs
+      The user will be able to easily view the socioeconomic factors by regions
     - Name
-      - SocioVis.py
+      - Processing and plotting run in transittrackers.py
     - Inputs
-      - The user will either click on the region or type in the zipcode.
+      - The user will click on the zip code
     - Outputs
-      - Once a region is clicked, a small table/box will appear next to the region
-      with the socioeconomic information. The outputs will include household income,
-      age, marriage status, highest education, number of family members, employment status, etc
+      - The outputs will include age and highest education dataframes
     - How it works
-      - The map of the Kings county will be divided into regions and the user can
-      click on the regions that will pop up a table/box of socioeconomic behaviors.
-      - Group the socioeconomic behavior by regions
+      - Selection box used to choose zip code and a plot will pop up
+      - Group the socioeconomic behavior by zip code

@@ -14,6 +14,9 @@ opts = dict(name='uwseds-transit-trackers',
                               'pandas',
                               'geopandas',
                               'bokeh',
+                              'math',
+                              'pysal',
+                              'os'
                               ]
             )
 
