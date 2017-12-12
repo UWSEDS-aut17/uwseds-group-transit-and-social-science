@@ -1,5 +1,5 @@
 # Improving Public Transportation
-<img src="/Images/transittrackers.png" alt="Drawing" height="12" width="12"/>
+<img src="/Images/transittrackers.png" alt="Drawing" height="48" width="48"/>
 
 Our group is primarily concerned with the issues of transportation in the city
 of Seattle. With the city growing at an alarming rate, there are inevitably
@@ -16,11 +16,11 @@ plots are shown in figures 1 and 2, below. The user can visualize bus routes
 that serve a specific zip code and the PSRC travel trends from individuals
 traveling in the 98133 zip code.
 
-![Bus Routes](/Images/routes.png =100x)
+<img src="/Images/routes.png" alt="Drawing" height="60" width="60"/>
 
 Figure 1.
 
-![PSRC Trends](/Images/trends.png =100x)
+<img src="/Images/trends.png" alt="Drawing" height="72" width="72"/>
 
 Figure 2.
 
@@ -29,11 +29,11 @@ to show the overall counts of age demographics and education levels by the
 chosen zip code. Figures 3 and 4 show examples of these charts for the 98133
 zip code.
 
-![Age Plot](/Images/age.png =100x)
+<img src="/Images/age.png" alt="Drawing" height="84" width="84"/>
 
 Figure 3.
 
-![Edu Plot](/Images/edu.png =100x)
+<img src="/Images/edu.png" alt="Drawing" height="96" width="96"/>
 
 Figure 4.
 
