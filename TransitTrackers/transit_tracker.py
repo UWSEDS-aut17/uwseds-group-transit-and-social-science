@@ -8,6 +8,7 @@ from bokeh.plotting import figure, curdoc, output_file, show
 from bokeh.events import Tap
 from bokeh.layouts import widgetbox, column, row, gridplot
 from bokeh.models.widgets import CheckboxGroup, Select, Paragraph, Div
+from utils import *
 
 import os
 import geopandas as gpd
@@ -15,6 +16,12 @@ import pysal as ps
 import pandas as pd
 import numpy as np
 import math
+
+URL = https://www.psrc.org/sites/default/files/2014-hhsurvey.zip
+
+#Generate unique file name and download the data from PSRC to Data Directory
+utils.filename_gen(URL)
+utils.get_data(URL)
 
 # Processing SocioEconomic Data
 #Read in data from the households and persons sheets
@@ -585,7 +592,7 @@ def js_code (N_plots):
     part2 = ''.join(['\n if (cb_obj.active[i] == '+str(i)+')'+'{l'+str(i)+'.visible = '+'true;' +  '} else ' for i in N_plots])
     if part2.endswith('else '):
         part2 = part2[:-5]
-    checkbox_code = '//console.log(cb_obj.active); '+ part1 + """for (i in cb_obj.active) {//console.log(cb_obj.active[i]);""" + part2 + """}""" 
+    checkbox_code = '//console.log(cb_obj.active); '+ part1 + """for (i in cb_obj.active) {//console.log(cb_obj.active[i]);""" + part2 + """}"""
     return (checkbox_code)
 
 checkbox_code = js_code (N_plots)
