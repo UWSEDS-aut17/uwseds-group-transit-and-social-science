@@ -16,11 +16,11 @@ plots are shown in figures 1 and 2, below. The user can visualize bus routes
 that serve a specific zip code and the PSRC travel trends from individuals
 traveling in the 98133 zip code.
 
-<img src="/Images/routes.png" alt="Drawing" height="200" width="200"/>
+<img src="/Images/routes.png" alt="Drawing" height="400" width="400"/>
 
 Figure 1.
 
-<img src="/Images/trends.png" alt="Drawing" height="200" width="200"/>
+<img src="/Images/trends.png" alt="Drawing" height="400" width="400"/>
 
 Figure 2.
 
@@ -29,11 +29,11 @@ to show the overall counts of age demographics and education levels by the
 chosen zip code. Figures 3 and 4 show examples of these charts for the 98133
 zip code.
 
-<img src="/Images/age.png" alt="Drawing" height="200" width="200"/>
+<img src="/Images/age.png" alt="Drawing" height="400" width="400"/>
 
 Figure 3.
 
-<img src="/Images/edu.png" alt="Drawing" height="200" width="200"/>
+<img src="/Images/edu.png" alt="Drawing" height="400" width="400"/>
 
 Figure 4.
 
