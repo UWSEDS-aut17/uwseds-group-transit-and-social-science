@@ -253,6 +253,15 @@ def getCoords(row, geom_col, coord_type):
 grid['x'] = grid.apply(getCoords, geom_col="geometry", coord_type="x", axis=1)
 grid['y'] = grid.apply(getCoords, geom_col="geometry", coord_type="y", axis=1)
 
+# Javascript code to be inputed in CustomJS for checkbox widget
+
+def js_code (N_plots):
+    part1 = ''.join(['\n l'+str(i)+'.visible = '+'false;' for i in N_plots])
+    part2 = ''.join(['\n if (cb_obj.active[i] == '+str(i)+')'+'{l'+str(i)+'.visible = '+'true;' +  '} else ' for i in N_plots])
+    if part2.endswith('else '):
+        part2 = part2[:-5]
+    checkbox_code = '//console.log(cb_obj.active); '+ part1 + """for (i in cb_obj.active) {//console.log(cb_obj.active[i]);""" + part2 + """}"""
+    return (checkbox_code)
 
 #PSRC Data Plotting
 
@@ -303,7 +312,8 @@ trip25 = p_psrc.line(t25_xs, t25_ys, color=col, line_width=wd)
 trip26 = p_psrc.line(t26_xs, t26_ys, color=col, line_width=wd)
 
 checkbox_psrc = CheckboxGroup(labels=used_zips)
-
+N_psrc = range(len(used_zips))
+checkbox_psrc_code = js_code (N_psrc)
 checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
                                     l3=trip3, l4=trip4, l5=trip5, l6=trip6,
                                     l7=trip7, l8=trip8, l9=trip9, l10=trip10,
@@ -313,95 +323,7 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
                                     l20=trip20, l21=trip21, l22=trip22,
                                     l23=trip23, l24 = trip24,
                                     l25 = trip25, l26 = trip26 ),
-                                    code="""
-    //console.log(cb_obj.active);
-    l0.visible = false;
-    l1.visible = false;
-    l2.visible = false;
-    l3.visible = false;
-    l4.visible = false;
-    l5.visible = false;
-    l6.visible = false;
-    l7.visible = false;
-    l8.visible = false;
-    l9.visible = false;
-    l10.visible = false;
-    l11.visible = false;
-    l12.visible = false;
-    l13.visible = false;
-    l14.visible = false;
-    l15.visible = false;
-    l16.visible = false;
-    l17.visible = false;
-    l18.visible = false;
-    l19.visible = false;
-    l20.visible = false;
-    l21.visible = false;
-    l22.visible = false;
-    l23.visible = false;
-    l24.visible = false;
-    l25.visible = false;
-    l26.visible = false;
-
-    for (i in cb_obj.active) {
-        //console.log(cb_obj.active[i]);
-        if (cb_obj.active[i] == 0) {
-            l0.visible = true;
-        } else if (cb_obj.active[i] == 1) {
-            l1.visible = true;
-        } else if (cb_obj.active[i] == 2) {
-            l2.visible = true;
-        } else if (cb_obj.active[i] == 3) {
-            l3.visible = true;
-        } else if (cb_obj.active[i] == 4) {
-            l4.visible = true;
-        } else if (cb_obj.active[i] == 5) {
-            l5.visible = true;
-        } else if (cb_obj.active[i] == 6) {
-            l6.visible = true;
-        } else if (cb_obj.active[i] == 7) {
-            l7.visible = true;
-        } else if (cb_obj.active[i] == 8) {
-            l8.visible = true;
-        } else if (cb_obj.active[i] == 9) {
-            l9.visible = true;
-        } else if (cb_obj.active[i] == 10) {
-            l10.visible = true;
-        } else if (cb_obj.active[i] == 11) {
-            l11.visible = true;
-        } else if (cb_obj.active[i] == 12) {
-            l12.visible = true;
-        } else if (cb_obj.active[i] == 13) {
-            l13.visible = true;
-        } else if (cb_obj.active[i] == 14) {
-            l14.visible = true;
-        } else if (cb_obj.active[i] == 15) {
-            l15.visible = true;
-        } else if (cb_obj.active[i] == 16) {
-            l16.visible = true;
-        } else if (cb_obj.active[i] == 17) {
-            l17.visible = true;
-        } else if (cb_obj.active[i] == 18) {
-            l18.visible = true;
-        } else if (cb_obj.active[i] == 19) {
-            l19.visible = true;
-        } else if (cb_obj.active[i] == 20) {
-            l20.visible = true;
-        } else if (cb_obj.active[i] == 21) {
-            l21.visible = true;
-        } else if (cb_obj.active[i] == 22) {
-            l22.visible = true;
-        } else if (cb_obj.active[i] == 23) {
-            l23.visible = true;
-        } else if (cb_obj.active[i] == 24) {
-            l24.visible = true;
-        } else if (cb_obj.active[i] == 25) {
-            l25.visible = true;
-        } else if (cb_obj.active[i] == 26) {
-            l26.visible = true;
-        }
-    }
-""")
+                                    code=checkbox_psrc_code)
 
 para_psrc = Paragraph(text="""Network Map of Seattle Travel. For each zipcode,
 a line from the selected zipcode conects to the most frequent destination
@@ -412,7 +334,7 @@ width=200, height=100)
 #Seattle Transit Mapping
 
 
-# Creating routes list to store bus number for each zip code
+# Creating routes list to store bus numbers for each zip code
 zip_route = zip_route.dropna(axis= 0, how='any')
 routes = {}
 name = ()
@@ -547,22 +469,21 @@ ns29 = GeoJSONDataSource(geojson=network29.to_json())
 
 
 
+# Defining income_classifier function to bin income
+def income_classifier(grid):
 
+    #Defining thresholds for income
+    breaks = [x for x in range(55000, 110000, 5000)]
 
-#Defining thresholds for income
-breaks = [x for x in range(55000, 110000, 5000)]
-
-#Initialize the classifier and apply it
-classifier = ps.User_Defined.make(bins=breaks)
-pt_classif = grid[['income']].apply(classifier)
-
-# Rename the classified column
-pt_classif.columns = ['incomeb']
-
-# Join it back to the grid layer
-grid = grid.join(pt_classif)
-# Adding new column with bin names to be used in legend
-grid['bin']= pd.np.where(grid.incomeb.astype(str) == '1', "[55000-60000]",
+    #Initialize the classifier and apply it
+    classifier = ps.User_Defined.make(bins=breaks)
+    pt_classif = grid[['income']].apply(classifier)
+    # Rename the classified column
+    pt_classif.columns = ['incomeb']
+    # Join it back to the grid layer
+    grid = grid.join(pt_classif)
+    # Adding new column with bin names to be used in legend
+    grid['bin']= pd.np.where(grid.incomeb.astype(str) == '1', "[55000-60000]",
                          pd.np.where(grid.incomeb.astype(str) == '2',
                          "[60000-65000]",pd.np.where(grid.incomeb.astype(str) == '3',
                          "[65000-70000]",pd.np.where(grid.incomeb.astype(str) == '4',
@@ -575,7 +496,9 @@ grid['bin']= pd.np.where(grid.incomeb.astype(str) == '1', "[55000-60000]",
                          "[100000-105000]",pd.np.where(grid.incomeb.astype(str) == '11',
                          "[105000-110000]",'NA')
                         ))))))))))
+    return(grid)
 
+grid = 	income_classifier(grid)
 #Sort shapefile based on income so have the legend in acsending order
 grid = grid.sort_values(['income'])
 
@@ -595,13 +518,16 @@ def js_code (N_plots):
     checkbox_code = '//console.log(cb_obj.active); '+ part1 + """for (i in cb_obj.active) {//console.log(cb_obj.active[i]);""" + part2 + """}"""
     return (checkbox_code)
 
+
+#Javascript code for bus routes map
+N_plots = range(len(zips_sea))
 checkbox_code = js_code (N_plots)
 
 #Generating colors for identifying income on map
 color_mapper = LogColorMapper(palette=palette)
 
 #Defining the figure
-p = figure(title="Seattle Bus Routes",tools=TOOLS,x_range=(-122.5, -122.1),
+p = figure(title="Seattle Bus Routes by Zipcode",tools=TOOLS,x_range=(-122.5, -122.1),
                 y_range=(47.46, 47.8),plot_width=600,plot_height=600)
 
 # Plot grid with income as base colors
