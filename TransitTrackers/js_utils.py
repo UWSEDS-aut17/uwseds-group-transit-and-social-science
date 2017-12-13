@@ -29,17 +29,38 @@ def income_classifier(grid):
     # Join it back to the grid layer
     grid = grid.join(pt_classif)
     # Adding new column with bin names to be used in legend
-    grid['bin'] = pd.np.where(grid.incomeb.astype(str) == '1',
-                              "[55000-60000]", pd.np.where(grid.incomeb.astype(str) == '2',
-                                                           "[60000-65000]", pd.np.where(grid.incomeb.astype(str) == '3',
-                                                                                        "[65000-70000]", pd.np.where(grid.incomeb.astype(str) == '4',
-                                                                                                                     "[70000-75000]", pd.np.where(grid.incomeb.astype(str) == '5',
-                                                                                                                                                  "[75000-80000]", pd.np.where(grid.incomeb.astype(str) == '6',
-                                                                                                                                                                               "[80000-85000]", pd.np.where(grid.incomeb.astype(str) == '7',
-                                                                                                                                                                                                            "[85000-90000]", pd.np.where(grid.incomeb.astype(str) == '8',
-                                                                                                                                                                                                                                         "[90000-95000]", pd.np.where(grid.incomeb.astype(str) == '9',
-                                                                                                                                                                                                                                                                      "[95000-100000]", pd.np.where(grid.incomeb.astype(str) == '10',
-                                                                                                                                                                                                                                                                                                    "[100000-105000]", pd.np.where(grid.incomeb.astype(str) == '11',
-                                                                                                                                                                                                                                                                                                                                   "[105000-110000]", 'NA')
-                                                                                                                                                                                                                                                                                                    ))))))))))
+    grid['bin'] = pd.np.where(
+        grid.incomeb.astype(str) == '1',
+        "[55000-60000]",
+        pd.np.where(
+            grid.incomeb.astype(str) == '2',
+            "[60000-65000]",
+            pd.np.where(
+                grid.incomeb.astype(str) == '3',
+                "[65000-70000]",
+                pd.np.where(
+                    grid.incomeb.astype(str) == '4',
+                    "[70000-75000]",
+                    pd.np.where(
+                        grid.incomeb.astype(str) == '5',
+                        "[75000-80000]",
+                        pd.np.where(
+                            grid.incomeb.astype(str) == '6',
+                            "[80000-85000]",
+                            pd.np.where(
+                                grid.incomeb.astype(str) == '7',
+                                "[85000-90000]",
+                                pd.np.where(
+                                    grid.incomeb.astype(str) == '8',
+                                    "[90000-95000]",
+                                    pd.np.where(
+                                        grid.incomeb.astype(str) == '9',
+                                        "[95000-100000]",
+                                        pd.np.where(
+                                            grid.incomeb.astype(str) == '10',
+                                            "[100000-105000]",
+                                            pd.np.where(
+                                                grid.incomeb.astype(str) == '11',
+                                                "[105000-110000]",
+                                                'NA')))))))))))
     return(grid)
