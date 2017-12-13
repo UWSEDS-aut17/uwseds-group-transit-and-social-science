@@ -1,11 +1,11 @@
 import unittest
 import utils
-from urllib import request
 import os
 
 GOOD_URL = 'https://www.psrc.org/sites/default/files/2014-hhsurvey.zip'
 BAD_URL = 'http://sobad/junkurl.html'
 FILENAME = '2014-hhsurvey.zip'
+
 
 class UtilsTest(unittest.TestCase):
 
