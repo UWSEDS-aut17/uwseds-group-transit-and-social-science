@@ -60,7 +60,8 @@ def income_classifier(grid):
                                             grid.incomeb.astype(str) == '10',
                                             "[100000-105000]",
                                             pd.np.where(
-                                                grid.incomeb.astype(str) == '11',
+                                                grid.incomeb.astype(str) ==
+                                                '11',
                                                 "[105000-110000]",
                                                 'NA')))))))))))
     return(grid)
