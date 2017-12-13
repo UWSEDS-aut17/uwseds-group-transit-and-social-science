@@ -11,8 +11,8 @@ def js_code(N_plots):
     if part2.endswith('else '):
         part2 = part2[:-5]
     checkbox_code = '//console.log(cb_obj.active); ' + part1 + \
-        """for (i in cb_obj.active)
-        {//console.log(cb_obj.active[i]);""" + part2 + """}"""
+        """for (i in cb_obj.active){//console.log(cb_obj.active[i]);""" \
+        + part2 + """}"""
     return (checkbox_code)
 
 

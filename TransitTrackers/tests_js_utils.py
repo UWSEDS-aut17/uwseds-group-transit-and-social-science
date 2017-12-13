@@ -18,9 +18,9 @@ class Data_test(unittest.TestCase):
         rn = range(0, n)
         code = js_utils.js_code(rn)
         if n > 10:
-            m = 70 * 10 + (n - 10) * 73 + (n - 1) * 5 + 89
+            m = 70 * 10 + (n - 10) * 73 + (n - 1) * 5 + 88
         if n <= 10:
-            m = 70 * n + (n - 1) * 5 + 89
+            m = 70 * n + (n - 1) * 5 + 88
         self.assertEqual(len(code), m)
 
     def test_income_classifier(self):
