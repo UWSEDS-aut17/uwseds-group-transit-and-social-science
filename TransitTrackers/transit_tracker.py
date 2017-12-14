@@ -20,32 +20,36 @@ utils.get_data(URL)
 
 # Processing SocioEconomic Data
 # Read in data from the households and persons sheets
-household_df = pd.read_excel('../Data/2014-pr3-hhsurvey-households.xlsx')
+households_df = pd.read_excel('../Data/2014-pr3-hhsurvey-households.xlsx')
 persons_df = pd.read_excel('../Data/2014-pr3-hhsurvey-persons.xlsx')
+trips_df = pd.read_excel('../Data/2014-pr3-hhsurvey-trips.xlsx')
 
 # Add household data required to persons_df
 hh_zip = []
 hh_city = []
-# for i in range(0,len(household_df['hhid'])):
+# Iterating through the dataframe and creating arrays of the household zipcode
+# and city that from the excel sheet containing household information
 for i in range(0, len(persons_df['hhid'])):
-    hh_zip.extend(household_df.query('hhid ==' + str(persons_df['hhid'][i]))
+    hh_zip.extend(households_df.query('hhid ==' + str(persons_df['hhid'][i]))
                   ['h_zip'])
-    hh_city.extend(household_df.query('hhid ==' + str(persons_df['hhid'][i]))
+    hh_city.extend(households_df.query('hhid ==' + str(persons_df['hhid'][i]))
                    ['h_city'])
-
+# The constructed arrays are then added to the persons dataframe so that it can
+# be further processed by city and zipcode
 persons_df['h_zip'] = hh_zip
 persons_df['h_city'] = hh_city
-
-Sea_df = persons_df[(persons_df['h_city'] == 'SEATTLE')]
-ddf = Sea_df[['h_zip', 'h_city', 'age', 'relationship', 'gender',
+# The next lines of code further filter the dataframe by Seattle and zipcode
+seattle_df = persons_df[(persons_df['h_city'] == 'SEATTLE')]
+ddf = seattle_df[['h_zip', 'h_city', 'age', 'relationship', 'gender',
               'employment', 'worker', 'education']]
-
+# Droping the empty rows for the dataset
 df = ddf.dropna(how='any')
-
+# Changing the type of data in the dataframe so that it can be used further
 df['h_zip'] = df.h_zip.astype(int)
 df['employment'] = df.employment.astype(int)
 df['education'] = df.education.astype(int)
-
+# Here we are adding the proper catagory string based on the number code
+# provided in the dataframe
 df['age_scaled'] = df['age']
 df['edu_scaled'] = df['education']
 df.loc[df['age'] == 1, 'age_scaled'] = 'Under 5'
@@ -67,19 +71,16 @@ df.loc[df['education'] == 4, 'edu_scaled'] = 'Vocational/Technical Training'
 df.loc[df['education'] == 5, 'edu_scaled'] = 'Associates Degree'
 df.loc[df['education'] == 6, 'edu_scaled'] = 'Bachelor Degree'
 df.loc[df['education'] == 7, 'edu_scaled'] = 'Graduate/Post-Graduate Degree'
-
+# This code is kind of a weird hack, when filtering the data using pandas
+# the zipcodes were no longer referencable but making it a csv and reading
+# it back into the code allowed it to be referenced
 age_group = df.groupby(['h_zip'])['age_scaled'].value_counts().to_frame()
 edu_group = df.groupby(['h_zip'])['edu_scaled'].value_counts().to_frame()
 age_group.to_csv('../Data/age_grouped.csv')
 edu_group.to_csv('../Data/edu_grouped.csv')
 
-# Process data for Trip Frequency
-
-# Read initial dataframes from GitHub
-households_df = pd.read_excel('../Data/2014-pr3-hhsurvey-households.xlsx')
-persons_df = pd.read_excel('../Data/2014-pr3-hhsurvey-persons.xlsx')
-trips_df = pd.read_excel('../Data/2014-pr3-hhsurvey-trips.xlsx')
-
+# The next set of code is processing the dataset for in order to map
+# the most frequent trips
 # Clean dataframes to include only Seattle data
 sea_trips_df = trips_df.loc[(trips_df['ocity'] == 'SEATTLE') &
                             (trips_df['dcity'] == 'SEATTLE')]
@@ -88,7 +89,7 @@ sea_households_df = households_df.loc[households_df['hhid'].
 sea_person_df = persons_df.loc[persons_df['personid'].
                                isin(sea_trips_df['personID'])]
 
-# Merge dataframes to all_df
+# Here we are merging all of the dataframes into a single dataframe
 trips_households_df = sea_trips_df.merge(
     sea_households_df, left_on='hhid', right_on='hhid', how='inner')
 all_df = trips_households_df.merge(
@@ -106,7 +107,8 @@ sub.to_csv('../Data/trip_freq.csv')
 trip_freq2 = pd.read_csv('../Data/trip_freq.csv')
 zip_latlon = pd.read_excel('../Data/zipcode_latlong.xlsx')
 
-# Adds latitude and longitude to the origin and destination zipcodes
+# Adds latitude and longitude to the origin and destination zipcodes by creating
+# a list of values that is acurate to the origin and destination zip
 olat = list(range(0, len(trip_freq2)))
 olon = list(range(0, len(trip_freq2)))
 dlat = list(range(0, len(trip_freq2)))
@@ -123,20 +125,21 @@ for i in list(range(0, len(trip_freq2))):
                     [['lat']].reset_index().loc[0]['lat'])
     dlon[i] = float(zip_latlon.query('zipcode ==' + str(dest_zip))
                     [['lon']].reset_index().loc[0]['lon'])
-
+# This code adds the constructed arrays to the dataframe
 trip_freq2['olat'] = pd.Series(olat, index=trip_freq2.index)
 trip_freq2['olon'] = pd.Series(olon, index=trip_freq2.index)
 trip_freq2['dlat'] = pd.Series(dlat, index=trip_freq2.index)
 trip_freq2['dlon'] = pd.Series(dlon, index=trip_freq2.index)
 trip_freq2.to_csv('../Data/trip_freq_latlong.csv')
-
+# This is the same hack that was previously used in order to access the origin
+# zipcode
 trip_freq2 = pd.read_csv('../Data/trip_freq_latlong.csv')
-
 
 def make_trip_xsys(origin_zip):
     '''
     This function constructs the list of xs and ys
-    properly formatted for the bokeh line plot.
+    properly formatted for the bokeh line plot based on the latitude
+    longitude of the origin and destination zipcodes
     '''
     freq_trip = trip_freq2.query('ozip ==' + origin_zip).reset_index()
     freq_trip = freq_trip[['olat', 'olon', 'dlat', 'dlon']]
@@ -188,7 +191,6 @@ used_zips = ['98101', '98102', '98103', '98104', '98105', '98106', '98107',
 
 # Start Bokeh Plotting
 
-
 # Assign grid from Seattle zips shapefile
 grid_fp = r"../Data/zips_sea/shp.shp"
 
@@ -206,7 +208,6 @@ network = gpd.read_file(network_fp)
 
 
 # The following functions help us to get coordinates from the shapefiles to map
-
 
 def getXYCoords(geometry, coord_type):
     """
@@ -305,6 +306,7 @@ trip24 = p_psrc.line(t24_xs, t24_ys, color=col, line_width=wd)
 trip25 = p_psrc.line(t25_xs, t25_ys, color=col, line_width=wd)
 trip26 = p_psrc.line(t26_xs, t26_ys, color=col, line_width=wd)
 
+# This code creates the coallback using CustomJS
 checkbox_psrc = CheckboxGroup(labels=used_zips)
 N_psrc = range(len(used_zips))
 checkbox_psrc_code = js_utils.js_code(N_psrc)
@@ -319,7 +321,7 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
                                             l23=trip23, l24=trip24,
                                             l25=trip25, l26=trip26),
                                   code=checkbox_psrc_code)
-
+# Description of the trip frequency plot
 para_psrc = Paragraph(text="""Network Map of Seattle Travel. For each zipcode,
 a line from the selected zipcode conects to the most frequent destination
 zipcodes. A dot representsthat the most frequent trips were within
@@ -327,8 +329,6 @@ the same zipcode.""",
                       width=200, height=100)
 
 # Seattle Transit Mapping
-
-
 # Creating routes list to store bus numbers for each zip code
 zip_route = zip_route.dropna(axis=0, how='any')
 routes = {}
@@ -341,8 +341,6 @@ for c in range(0, 30):
     f = f + zips_sea['count'][c].astype(int)
 
 # Extracting bus routes for each zip code
-
-
 network0 = network.loc[network.OBJECTID.isin(routes[0]), :]
 network0['zip'] = zips_sea.zip[0]
 ns0 = GeoJSONDataSource(geojson=network0.to_json())
@@ -472,10 +470,6 @@ grid = grid.sort_values(['income'])
 g_df = grid.drop('geometry', axis=1).copy()
 gsource = ColumnDataSource(g_df)
 
-# Javascript code to be inputed in CustomJS for checkbox widget
-N_plots = range(len(zips_sea))
-
-
 # Javascript code for bus routes map
 N_plots = range(len(zips_sea))
 checkbox_code = js_utils.js_code(N_plots)
@@ -536,7 +530,7 @@ ghover = HoverTool(renderers=[grid2])
 ghover.tooltips = [("zip code", "@GEOID10")]
 p.add_tools(ghover)
 
-# Defining checkbox
+# Defining checkbox and defining the CustomJS code for the callback
 checkbox = CheckboxGroup(labels=list(zips_sea['zip'][0:30].astype(str)),
                          active=[])
 checkbox.callback = CustomJS(args=dict(l0=r0, l1=r1, l2=r2, l3=r3, l4=r4,
@@ -556,14 +550,16 @@ that service the specified zipcode.
 
 group = widgetbox(checkbox)
 
-# Begin processing socioeconomic data
-
-
+# Here we are importing processing socioeconomic data and renamed a column to
+# accurately relay the information contained
 age_group = pd.read_csv('../Data/age_grouped.csv')
 edu_group = pd.read_csv('../Data/edu_grouped.csv')
 age_group = age_group.rename(index=str, columns={'age_scaled.1': 'age_counts'})
 edu_group = edu_group.rename(index=str, columns={'edu_scaled.1': 'edu_counts'})
 
+# Here we are constructing dictionaries of the socioeconomic data referenced by
+# the zipcode. These dictionaries are made so that we can pass information to
+# the JavaScript using the bokeh class ColumnDataSource and function CustomJS
 age_scale = {}
 edu_scale = {}
 age_count = {}
@@ -574,11 +570,17 @@ for i in used_zips:
     edu_scale[i] = edu_group.query('h_zip ==' + i)['edu_scaled'].tolist()
     edu_count[i] = edu_group.query('h_zip ==' + i)['edu_counts'].tolist()
 
+# These are initialized values for the x and y axes for the the age distribution
+# and education distribution plots
 age_x = age_scale['98102']
 age_y = age_count['98102']
 edu_x = edu_scale['98102']
 edu_y = edu_count['98102']
 
+# Here we are creating bokeh class ColumnDataSource (CDS) that can be read into
+# CustomJS. Each plot has three CDS. A dummy CDS that is
+# plotted by bokeh, called age_plot_data and edu_plot_data, and two CDS made
+# from the dictionaries that were constructed with the xs and ys
 age_data_CDS = ColumnDataSource(data=age_scale)
 age_count_CDS = ColumnDataSource(data=age_count)
 age_data_zip = {'x': age_x, 'y': age_y}
@@ -588,6 +590,7 @@ edu_count_CDS = ColumnDataSource(data=edu_count)
 edu_data_zip = {'x': edu_x, 'y': edu_y}
 edu_plot_data = ColumnDataSource(data=edu_data_zip)
 
+# Here we initialize the figures for the two plots
 age_plot = figure(title='Age Distribution by Zipcode', tools=TOOLS,
                   plot_width=600, plot_height=600, x_range=age_x)
 age_plot.vbar(x='x', top='y', source=age_plot_data, width=.5,
@@ -598,6 +601,11 @@ edu_plot.vbar(x='x', top='y', source=edu_plot_data, width=0.5,
               color='firebrick')
 edu_plot.xaxis.major_label_orientation = math.pi / 3
 
+# This is the JavaScript that creates the interactive nature of the plots
+# We pass all of the CDS created to the JavaScript through the CustomJS
+# The JavaScript, selects the appropriate data based on the slected zipcodes
+# the dummy CDS is then written over using that selected data and then pushed
+# back to the python code to change the plots
 select = Select(title='Zipcode', value='98102', options=used_zips)
 
 callback = CustomJS(args={'source1': age_plot_data, 'source2': age_data_CDS,
@@ -620,9 +628,9 @@ callback = CustomJS(args={'source1': age_plot_data, 'source2': age_data_CDS,
         source1.change.emit();
         source4.change.emit();
     """)
-
+# This is bokeh code to get the zipcode from the selection menu in the plot
 select.js_on_change('value', callback)
-
+# This is a widget to give a overview description to the HTML
 description = Div(text="""This is <b>Transit Trackers!</b> Your interactive map
 for Seattle transit trends and socioeconomic data. Customize these
 maps by selecting which zipcodes you are intersted in.
@@ -632,12 +640,13 @@ toolbar for the Map.""", width=600, height=100)
 para_soc = Paragraph(text="""These graphs show the age and education
 distribution for the zipcode selected in the dropdown menu""", width=200,
                      height=100)
-
+# This is bokeh code to define the plots layout for the final HTML
 layout = gridplot([widgetbox(description)],
                   [widgetbox(para_routes), p, widgetbox(checkbox)],
                   [widgetbox(para_psrc), p_psrc, widgetbox(checkbox_psrc)],
                   [age_plot, edu_plot, widgetbox(select, para_soc)])
-
+# THis saves the output HTML to the examples folder, opens the HTML and names
+# the HTML
 outfp = r"../examples/transit_trackers.html"
 output_file(outfp, title='Transit Trackers', mode='cdn', root_dir=None)
 show(layout)
