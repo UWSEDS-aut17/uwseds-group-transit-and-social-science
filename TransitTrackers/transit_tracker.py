@@ -1,3 +1,4 @@
+#Import necessary Bokeh packages and features
 from bokeh.io import output_file, show
 from bokeh.models import ColumnDataSource, CustomJS, HoverTool, LogColorMapper
 from bokeh.models import GeoJSONDataSource
@@ -6,13 +7,22 @@ from bokeh.palettes import Magma4 as palette1
 from bokeh.plotting import figure
 from bokeh.layouts import widgetbox, gridplot
 from bokeh.models.widgets import CheckboxGroup, Select, Paragraph, Div
+
+#Import required scripts and python packages
 import utils
 import js_utils
 import geopandas as gpd
 import pandas as pd
 import math
 
-URL = 'https://www.psrc.org/sites/default/files/2014-hhsurvey.zip'
+#Import constants from constants.py
+from constants import URL
+from constants import AGE_RANGE_LIST
+from constants import EDU_RANGE_LIST
+from constants import TOOLS
+from constants import USED_ZIPS_PSRC
+from constants import N_PSRC
+from constants import WD
 
 # Generate unique file name and download the data from PSRC to Data Directory
 # This also unzips the files for you
@@ -53,25 +63,25 @@ df['education'] = df.education.astype(int)
 # provided in the dataframe
 df['age_scaled'] = df['age']
 df['edu_scaled'] = df['education']
-df.loc[df['age'] == 1, 'age_scaled'] = 'Under 5'
-df.loc[df['age'] == 2, 'age_scaled'] = '5-11'
-df.loc[df['age'] == 3, 'age_scaled'] = '12-15'
-df.loc[df['age'] == 4, 'age_scaled'] = '16-17'
-df.loc[df['age'] == 5, 'age_scaled'] = '18-24'
-df.loc[df['age'] == 6, 'age_scaled'] = '25-34'
-df.loc[df['age'] == 7, 'age_scaled'] = '35-44'
-df.loc[df['age'] == 8, 'age_scaled'] = '45-54'
-df.loc[df['age'] == 9, 'age_scaled'] = '55-64'
-df.loc[df['age'] == 10, 'age_scaled'] = '65-74'
-df.loc[df['age'] == 11, 'age_scaled'] = '75-84'
-df.loc[df['age'] == 12, 'age_scaled'] = '85 or older'
-df.loc[df['education'] == 1, 'edu_scaled'] = 'Less than High School'
-df.loc[df['education'] == 2, 'edu_scaled'] = 'High School'
-df.loc[df['education'] == 3, 'edu_scaled'] = 'Some College'
-df.loc[df['education'] == 4, 'edu_scaled'] = 'Vocational/Technical Training'
-df.loc[df['education'] == 5, 'edu_scaled'] = 'Associates Degree'
-df.loc[df['education'] == 6, 'edu_scaled'] = 'Bachelor Degree'
-df.loc[df['education'] == 7, 'edu_scaled'] = 'Graduate/Post-Graduate Degree'
+df.loc[df['age'] == AGE_RANGE_LIST[1], 'age_scaled'] = 'Under 5'
+df.loc[df['age'] == AGE_RANGE_LIST[2], 'age_scaled'] = '5-11'
+df.loc[df['age'] == AGE_RANGE_LIST[3], 'age_scaled'] = '12-15'
+df.loc[df['age'] == AGE_RANGE_LIST[4], 'age_scaled'] = '16-17'
+df.loc[df['age'] == AGE_RANGE_LIST[5], 'age_scaled'] = '18-24'
+df.loc[df['age'] == AGE_RANGE_LIST[6], 'age_scaled'] = '25-34'
+df.loc[df['age'] == AGE_RANGE_LIST[7], 'age_scaled'] = '35-44'
+df.loc[df['age'] == AGE_RANGE_LIST[8], 'age_scaled'] = '45-54'
+df.loc[df['age'] == AGE_RANGE_LIST[9], 'age_scaled'] = '55-64'
+df.loc[df['age'] == AGE_RANGE_LIST[10], 'age_scaled'] = '65-74'
+df.loc[df['age'] == AGE_RANGE_LIST[11], 'age_scaled'] = '75-84'
+df.loc[df['age'] == AGE_RANGE_LIST[12], 'age_scaled'] = '85 or older'
+df.loc[df['education'] == EDU_RANGE_LIST[1], 'edu_scaled'] = 'Less than High School'
+df.loc[df['education'] == EDU_RANGE_LIST[2], 'edu_scaled'] = 'High School'
+df.loc[df['education'] == EDU_RANGE_LIST[3], 'edu_scaled'] = 'Some College'
+df.loc[df['education'] == EDU_RANGE_LIST[4], 'edu_scaled'] = 'Vocational/Technical Training'
+df.loc[df['education'] == EDU_RANGE_LIST[5], 'edu_scaled'] = 'Associates Degree'
+df.loc[df['education'] == EDU_RANGE_LIST[6], 'edu_scaled'] = 'Bachelor Degree'
+df.loc[df['education'] == EDU_RANGE_LIST[7], 'edu_scaled'] = 'Graduate/Post-Graduate Degree'
 # This code is kind of a weird hack, when filtering the data using pandas
 # the zipcodes were no longer referencable but making it a csv and reading
 # it back into the code allowed it to be referenced
@@ -156,39 +166,34 @@ def make_trip_xsys(origin_zip):
 
 # Start assigning data of xs and ys from the origin and destination lat long
 # to new dataframes for each zip code
-[t0_xs, t0_ys] = make_trip_xsys('98101')
-[t1_xs, t1_ys] = make_trip_xsys('98102')
-[t2_xs, t2_ys] = make_trip_xsys('98103')
-[t3_xs, t3_ys] = make_trip_xsys('98104')
-[t4_xs, t4_ys] = make_trip_xsys('98105')
-[t5_xs, t5_ys] = make_trip_xsys('98106')
-[t6_xs, t6_ys] = make_trip_xsys('98107')
-[t7_xs, t7_ys] = make_trip_xsys('98108')
-[t8_xs, t8_ys] = make_trip_xsys('98109')
-[t9_xs, t9_ys] = make_trip_xsys('98112')
-[t10_xs, t10_ys] = make_trip_xsys('98115')
-[t11_xs, t11_ys] = make_trip_xsys('98116')
-[t12_xs, t12_ys] = make_trip_xsys('98117')
-[t13_xs, t13_ys] = make_trip_xsys('98118')
-[t14_xs, t14_ys] = make_trip_xsys('98119')
-[t15_xs, t15_ys] = make_trip_xsys('98121')
-[t16_xs, t16_ys] = make_trip_xsys('98122')
-[t17_xs, t17_ys] = make_trip_xsys('98125')
-[t18_xs, t18_ys] = make_trip_xsys('98126')
-[t19_xs, t19_ys] = make_trip_xsys('98133')
-[t20_xs, t20_ys] = make_trip_xsys('98136')
-[t21_xs, t21_ys] = make_trip_xsys('98144')
-[t22_xs, t22_ys] = make_trip_xsys('98146')
-[t23_xs, t23_ys] = make_trip_xsys('98177')
-[t24_xs, t24_ys] = make_trip_xsys('98178')
-[t25_xs, t25_ys] = make_trip_xsys('98195')
-[t26_xs, t26_ys] = make_trip_xsys('98199')
+[t0_xs, t0_ys] = make_trip_xsys(USED_ZIPS_PSRC[0])
+[t1_xs, t1_ys] = make_trip_xsys(USED_ZIPS_PSRC[1])
+[t2_xs, t2_ys] = make_trip_xsys(USED_ZIPS_PSRC[2])
+[t3_xs, t3_ys] = make_trip_xsys(USED_ZIPS_PSRC[3])
+[t4_xs, t4_ys] = make_trip_xsys(USED_ZIPS_PSRC[4])
+[t5_xs, t5_ys] = make_trip_xsys(USED_ZIPS_PSRC[5])
+[t6_xs, t6_ys] = make_trip_xsys(USED_ZIPS_PSRC[6])
+[t7_xs, t7_ys] = make_trip_xsys(USED_ZIPS_PSRC[7])
+[t8_xs, t8_ys] = make_trip_xsys(USED_ZIPS_PSRC[8])
+[t9_xs, t9_ys] = make_trip_xsys(USED_ZIPS_PSRC[9])
+[t10_xs, t10_ys] = make_trip_xsys(USED_ZIPS_PSRC[10])
+[t11_xs, t11_ys] = make_trip_xsys(USED_ZIPS_PSRC[11])
+[t12_xs, t12_ys] = make_trip_xsys(USED_ZIPS_PSRC[12])
+[t13_xs, t13_ys] = make_trip_xsys(USED_ZIPS_PSRC[13])
+[t14_xs, t14_ys] = make_trip_xsys(USED_ZIPS_PSRC[14])
+[t15_xs, t15_ys] = make_trip_xsys(USED_ZIPS_PSRC[15])
+[t16_xs, t16_ys] = make_trip_xsys(USED_ZIPS_PSRC[16])
+[t17_xs, t17_ys] = make_trip_xsys(USED_ZIPS_PSRC[17])
+[t18_xs, t18_ys] = make_trip_xsys(USED_ZIPS_PSRC[18])
+[t19_xs, t19_ys] = make_trip_xsys(USED_ZIPS_PSRC[19])
+[t20_xs, t20_ys] = make_trip_xsys(USED_ZIPS_PSRC[20])
+[t21_xs, t21_ys] = make_trip_xsys(USED_ZIPS_PSRC[21])
+[t22_xs, t22_ys] = make_trip_xsys(USED_ZIPS_PSRC[22])
+[t23_xs, t23_ys] = make_trip_xsys(USED_ZIPS_PSRC[23])
+[t24_xs, t24_ys] = make_trip_xsys(USED_ZIPS_PSRC[24])
+[t25_xs, t25_ys] = make_trip_xsys(USED_ZIPS_PSRC[25])
+[t26_xs, t26_ys] = make_trip_xsys(USED_ZIPS_PSRC[26])
 
-# Create list of the zip codes we're interested in
-used_zips = ['98101', '98102', '98103', '98104', '98105', '98106', '98107',
-             '98108', '98109', '98112', '98115', '98116', '98117', '98118',
-             '98119', '98121', '98122', '98125', '98126', '98133', '98136',
-             '98144', '98146', '98177', '98178', '98195', '98199']
 
 # Start Bokeh Plotting
 # Assign grid from Seattle zips shapefile
@@ -264,7 +269,6 @@ grid['y'] = grid.apply(getCoords, geom_col="geometry", coord_type="y", axis=1)
 g_df_psrc = grid.drop('geometry', axis=1).copy()
 gsource_psrc = ColumnDataSource(g_df_psrc)
 
-TOOLS = "pan,wheel_zoom,reset,poly_select,box_select,tap,box_zoom,save"
 p_psrc = figure(title="Most Frequent Destinations by Zipcode",
                 tools=TOOLS, x_range=(-122.5, -122.1), y_range=(47.46, 47.8),
                 plot_width=600, plot_height=600)
@@ -276,40 +280,39 @@ grid2_psrc = p_psrc.patches('x', 'y', source=gsource_psrc,
 
 # Color and line width for routes
 col = palette1[3]
-wd = 2
 
-trip0 = p_psrc.line(t0_xs, t0_ys, color=col, line_width=wd)
-trip1 = p_psrc.line(t1_xs, t1_ys, color=col, line_width=wd)
-trip2 = p_psrc.line(t2_xs, t2_ys, color=col, line_width=wd)
-trip3 = p_psrc.line(t3_xs, t3_ys, color=col, line_width=wd)
-trip4 = p_psrc.line(t4_xs, t4_ys, color=col, line_width=wd)
-trip5 = p_psrc.line(t5_xs, t5_ys, color=col, line_width=wd)
-trip6 = p_psrc.line(t6_xs, t6_ys, color=col, line_width=wd)
-trip7 = p_psrc.line(t7_xs, t7_ys, color=col, line_width=wd)
-trip8 = p_psrc.line(t8_xs, t8_ys, color=col, line_width=wd)
-trip9 = p_psrc.line(t9_xs, t9_ys, color=col, line_width=wd)
-trip10 = p_psrc.line(t10_xs, t10_ys, color=col, line_width=wd)
-trip11 = p_psrc.line(t11_xs, t11_ys, color=col, line_width=wd)
-trip12 = p_psrc.line(t12_xs, t12_ys, color=col, line_width=wd)
-trip13 = p_psrc.line(t13_xs, t13_ys, color=col, line_width=wd)
-trip14 = p_psrc.line(t14_xs, t14_ys, color=col, line_width=wd)
-trip15 = p_psrc.line(t15_xs, t15_ys, color=col, line_width=wd)
-trip16 = p_psrc.line(t16_xs, t16_ys, color=col, line_width=wd)
-trip17 = p_psrc.line(t17_xs, t17_ys, color=col, line_width=wd)
-trip18 = p_psrc.line(t18_xs, t18_ys, color=col, line_width=wd)
-trip19 = p_psrc.line(t19_xs, t19_ys, color=col, line_width=wd)
-trip20 = p_psrc.line(t20_xs, t20_ys, color=col, line_width=wd)
-trip21 = p_psrc.line(t21_xs, t21_ys, color=col, line_width=wd)
-trip22 = p_psrc.line(t22_xs, t22_ys, color=col, line_width=wd)
-trip23 = p_psrc.line(t23_xs, t23_ys, color=col, line_width=wd)
-trip24 = p_psrc.line(t24_xs, t24_ys, color=col, line_width=wd)
-trip25 = p_psrc.line(t25_xs, t25_ys, color=col, line_width=wd)
-trip26 = p_psrc.line(t26_xs, t26_ys, color=col, line_width=wd)
+
+trip0 = p_psrc.line(t0_xs, t0_ys, color=col, line_width=WD)
+trip1 = p_psrc.line(t1_xs, t1_ys, color=col, line_width=WD)
+trip2 = p_psrc.line(t2_xs, t2_ys, color=col, line_width=WD)
+trip3 = p_psrc.line(t3_xs, t3_ys, color=col, line_width=WD)
+trip4 = p_psrc.line(t4_xs, t4_ys, color=col, line_width=WD)
+trip5 = p_psrc.line(t5_xs, t5_ys, color=col, line_width=WD)
+trip6 = p_psrc.line(t6_xs, t6_ys, color=col, line_width=WD)
+trip7 = p_psrc.line(t7_xs, t7_ys, color=col, line_width=WD)
+trip8 = p_psrc.line(t8_xs, t8_ys, color=col, line_width=WD)
+trip9 = p_psrc.line(t9_xs, t9_ys, color=col, line_width=WD)
+trip10 = p_psrc.line(t10_xs, t10_ys, color=col, line_width=WD)
+trip11 = p_psrc.line(t11_xs, t11_ys, color=col, line_width=WD)
+trip12 = p_psrc.line(t12_xs, t12_ys, color=col, line_width=WD)
+trip13 = p_psrc.line(t13_xs, t13_ys, color=col, line_width=WD)
+trip14 = p_psrc.line(t14_xs, t14_ys, color=col, line_width=WD)
+trip15 = p_psrc.line(t15_xs, t15_ys, color=col, line_width=WD)
+trip16 = p_psrc.line(t16_xs, t16_ys, color=col, line_width=WD)
+trip17 = p_psrc.line(t17_xs, t17_ys, color=col, line_width=WD)
+trip18 = p_psrc.line(t18_xs, t18_ys, color=col, line_width=WD)
+trip19 = p_psrc.line(t19_xs, t19_ys, color=col, line_width=WD)
+trip20 = p_psrc.line(t20_xs, t20_ys, color=col, line_width=WD)
+trip21 = p_psrc.line(t21_xs, t21_ys, color=col, line_width=WD)
+trip22 = p_psrc.line(t22_xs, t22_ys, color=col, line_width=WD)
+trip23 = p_psrc.line(t23_xs, t23_ys, color=col, line_width=WD)
+trip24 = p_psrc.line(t24_xs, t24_ys, color=col, line_width=WD)
+trip25 = p_psrc.line(t25_xs, t25_ys, color=col, line_width=WD)
+trip26 = p_psrc.line(t26_xs, t26_ys, color=col, line_width=WD)
 
 # This code creates the coallback using CustomJS
-checkbox_psrc = CheckboxGroup(labels=used_zips)
-N_psrc = range(len(used_zips))
-checkbox_psrc_code = js_utils.js_code(N_psrc)
+checkbox_psrc = CheckboxGroup(labels=USED_ZIPS_PSRC)
+checkbox_psrc_code = js_utils.js_code(N_PSRC)
 checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
                                             l3=trip3, l4=trip4, l5=trip5,
                                             l6=trip6, l7=trip7, l8=trip8,
@@ -489,39 +492,38 @@ grid2 = p.patches('x', 'y', source=gsource,
 
 # Color and line width for routes
 col = palette1[2]
-wd = 0.5
 
 # ploting routes
-r0 = p.multi_line('xs', 'ys', source=ns0, color=col, line_width=wd)
-r1 = p.multi_line('xs', 'ys', source=ns1, color=col, line_width=wd)
-r2 = p.multi_line('xs', 'ys', source=ns2, color=col, line_width=wd)
-r3 = p.multi_line('xs', 'ys', source=ns3, color=col, line_width=wd)
-r4 = p.multi_line('xs', 'ys', source=ns4, color=col, line_width=wd)
-r5 = p.multi_line('xs', 'ys', source=ns5, color=col, line_width=wd)
-r6 = p.multi_line('xs', 'ys', source=ns6, color=col, line_width=wd)
-r7 = p.multi_line('xs', 'ys', source=ns7, color=col, line_width=wd)
-r8 = p.multi_line('xs', 'ys', source=ns8, color=col, line_width=wd)
-r9 = p.multi_line('xs', 'ys', source=ns9, color=col, line_width=wd)
-r10 = p.multi_line('xs', 'ys', source=ns10, color=col, line_width=wd)
-r11 = p.multi_line('xs', 'ys', source=ns11, color=col, line_width=wd)
-r12 = p.multi_line('xs', 'ys', source=ns12, color=col, line_width=wd)
-r13 = p.multi_line('xs', 'ys', source=ns13, color=col, line_width=wd)
-r14 = p.multi_line('xs', 'ys', source=ns14, color=col, line_width=wd)
-r15 = p.multi_line('xs', 'ys', source=ns15, color=col, line_width=wd)
-r16 = p.multi_line('xs', 'ys', source=ns16, color=col, line_width=wd)
-r17 = p.multi_line('xs', 'ys', source=ns17, color=col, line_width=wd)
-r18 = p.multi_line('xs', 'ys', source=ns18, color=col, line_width=wd)
-r19 = p.multi_line('xs', 'ys', source=ns19, color=col, line_width=wd)
-r20 = p.multi_line('xs', 'ys', source=ns20, color=col, line_width=wd)
-r21 = p.multi_line('xs', 'ys', source=ns21, color=col, line_width=wd)
-r22 = p.multi_line('xs', 'ys', source=ns22, color=col, line_width=wd)
-r23 = p.multi_line('xs', 'ys', source=ns23, color=col, line_width=wd)
-r24 = p.multi_line('xs', 'ys', source=ns24, color=col, line_width=wd)
-r25 = p.multi_line('xs', 'ys', source=ns25, color=col, line_width=wd)
-r26 = p.multi_line('xs', 'ys', source=ns26, color=col, line_width=wd)
-r27 = p.multi_line('xs', 'ys', source=ns27, color=col, line_width=wd)
-r28 = p.multi_line('xs', 'ys', source=ns28, color=col, line_width=wd)
-r29 = p.multi_line('xs', 'ys', source=ns29, color=col, line_width=wd)
+r0 = p.multi_line('xs', 'ys', source=ns0, color=col, line_width=WD2)
+r1 = p.multi_line('xs', 'ys', source=ns1, color=col, line_width=WD2)
+r2 = p.multi_line('xs', 'ys', source=ns2, color=col, line_width=WD2)
+r3 = p.multi_line('xs', 'ys', source=ns3, color=col, line_width=WD2)
+r4 = p.multi_line('xs', 'ys', source=ns4, color=col, line_width=WD2)
+r5 = p.multi_line('xs', 'ys', source=ns5, color=col, line_width=WD2)
+r6 = p.multi_line('xs', 'ys', source=ns6, color=col, line_width=WD2)
+r7 = p.multi_line('xs', 'ys', source=ns7, color=col, line_width=WD2)
+r8 = p.multi_line('xs', 'ys', source=ns8, color=col, line_width=WD2)
+r9 = p.multi_line('xs', 'ys', source=ns9, color=col, line_width=WD2)
+r10 = p.multi_line('xs', 'ys', source=ns10, color=col, line_width=WD2)
+r11 = p.multi_line('xs', 'ys', source=ns11, color=col, line_width=WD2)
+r12 = p.multi_line('xs', 'ys', source=ns12, color=col, line_width=WD2)
+r13 = p.multi_line('xs', 'ys', source=ns13, color=col, line_width=WD2)
+r14 = p.multi_line('xs', 'ys', source=ns14, color=col, line_width=WD2)
+r15 = p.multi_line('xs', 'ys', source=ns15, color=col, line_width=WD2)
+r16 = p.multi_line('xs', 'ys', source=ns16, color=col, line_width=WD2)
+r17 = p.multi_line('xs', 'ys', source=ns17, color=col, line_width=WD2)
+r18 = p.multi_line('xs', 'ys', source=ns18, color=col, line_width=WD2)
+r19 = p.multi_line('xs', 'ys', source=ns19, color=col, line_width=WD2)
+r20 = p.multi_line('xs', 'ys', source=ns20, color=col, line_width=WD2)
+r21 = p.multi_line('xs', 'ys', source=ns21, color=col, line_width=WD2)
+r22 = p.multi_line('xs', 'ys', source=ns22, color=col, line_width=WD2)
+r23 = p.multi_line('xs', 'ys', source=ns23, color=col, line_width=WD2)
+r24 = p.multi_line('xs', 'ys', source=ns24, color=col, line_width=WD2)
+r25 = p.multi_line('xs', 'ys', source=ns25, color=col, line_width=WD2)
+r26 = p.multi_line('xs', 'ys', source=ns26, color=col, line_width=WD2)
+r27 = p.multi_line('xs', 'ys', source=ns27, color=col, line_width=WD2)
+r28 = p.multi_line('xs', 'ys', source=ns28, color=col, line_width=WD2)
+r29 = p.multi_line('xs', 'ys', source=ns29, color=col, line_width=WD2)
 
 # Defining hover tool
 ghover = HoverTool(renderers=[grid2])
@@ -562,7 +564,7 @@ age_scale = {}
 edu_scale = {}
 age_count = {}
 edu_count = {}
-for i in used_zips:
+for i in USED_ZIPS_PSRC:
     age_scale[i] = age_group.query('h_zip ==' + i)['age_scaled'].tolist()
     age_count[i] = age_group.query('h_zip ==' + i)['age_counts'].tolist()
     edu_scale[i] = edu_group.query('h_zip ==' + i)['edu_scaled'].tolist()
@@ -570,10 +572,10 @@ for i in used_zips:
 
 # These are initialized values for the x and y axes for the the age distribution
 # and education distribution plots
-age_x = age_scale['98102']
-age_y = age_count['98102']
-edu_x = edu_scale['98102']
-edu_y = edu_count['98102']
+age_x = age_scale[USED_ZIPS_PSRC[1]]
+age_y = age_count[USED_ZIPS_PSRC[1]]
+edu_x = edu_scale[USED_ZIPS_PSRC[1]]
+edu_y = edu_count[USED_ZIPS_PSRC[1]]
 
 # Here we are creating bokeh class ColumnDataSource (CDS) that can be read into
 # CustomJS. Each plot has three CDS. A dummy CDS that is
@@ -604,7 +606,7 @@ edu_plot.xaxis.major_label_orientation = math.pi / 3
 # The JavaScript, selects the appropriate data based on the slected zipcodes
 # the dummy CDS is then written over using that selected data and then pushed
 # back to the python code to change the plots
-select = Select(title='Zipcode', value='98102', options=used_zips)
+select = Select(title='Zipcode', value=USED_ZIPS_PSRC[1], options=USED_ZIPS_PSRC)
 
 callback = CustomJS(args={'source1': age_plot_data, 'source2': age_data_CDS,
                           'source3': age_count_CDS, 'source4': edu_plot_data,
