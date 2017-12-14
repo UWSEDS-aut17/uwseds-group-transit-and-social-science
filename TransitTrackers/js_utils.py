@@ -3,6 +3,12 @@ import pandas as pd
 
 
 def js_code(N_plots):
+    """This function creates customJS code to use for Bokeh visualization. The
+    code requires specific syntax but can be automated for a specific number
+    of N_plots. 
+    inputs: number of plots user is making
+    returns: code for specific checkbox for plot
+    """
     part1 = ''.join(['\n l' + str(i) + '.visible = ' +
                      'false;' for i in N_plots])
     part2 = ''.join(['\n if (cb_obj.active[i] == ' + str(i) + ')' +
@@ -17,7 +23,11 @@ def js_code(N_plots):
 
 
 def income_classifier(grid):
-
+    """This function creates and classifies a map grid for visualizing
+    income on a chloropleth map using Bokeh
+    inputs: grid used for Bokehmapping
+    returns: updated grid
+    """
     # Defining thresholds for income
     breaks = [x for x in range(55000, 110000, 5000)]
 
