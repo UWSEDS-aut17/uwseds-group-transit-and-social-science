@@ -82,18 +82,18 @@ edu_group.to_csv('../Data/edu_grouped.csv')
 # The next set of code is processing the dataset for in order to map
 # the most frequent trips
 # Clean dataframes to include only Seattle data
-sea_trips_df = trips_df.loc[(trips_df['ocity'] == 'SEATTLE') &
+seattle_trips_df = trips_df.loc[(trips_df['ocity'] == 'SEATTLE') &
                             (trips_df['dcity'] == 'SEATTLE')]
-sea_households_df = households_df.loc[households_df['hhid'].
-                                      isin(sea_trips_df['hhid'])]
-sea_person_df = persons_df.loc[persons_df['personid'].
-                               isin(sea_trips_df['personID'])]
+seattle_households_df = households_df.loc[households_df['hhid'].
+                                      isin(seattle_trips_df['hhid'])]
+seattle_person_df = persons_df.loc[persons_df['personid'].
+                               isin(seattle_trips_df['personID'])]
 
 # Here we are merging all of the dataframes into a single dataframe
-trips_households_df = sea_trips_df.merge(
-    sea_households_df, left_on='hhid', right_on='hhid', how='inner')
+trips_households_df = seattle_trips_df.merge(
+    seattle_households_df, left_on='hhid', right_on='hhid', how='inner')
 all_df = trips_households_df.merge(
-    sea_person_df, left_on='personID', right_on='personid', how='inner')
+    seattle_person_df, left_on='personID', right_on='personid', how='inner')
 
 # Extract only the columns we need from the all_df to df
 df = all_df[['ozip', 'dzip']]
