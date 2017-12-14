@@ -15,11 +15,12 @@ import math
 URL = 'https://www.psrc.org/sites/default/files/2014-hhsurvey.zip'
 
 # Generate unique file name and download the data from PSRC to Data Directory
+# This also unzips the files for you
 utils.filename_gen(URL)
 utils.get_data(URL)
 
 # Processing SocioEconomic Data
-# Read in data from the households and persons sheets
+# Read in data from the households, persons, and trips data sheets
 households_df = pd.read_excel('../Data/2014-pr3-hhsurvey-households.xlsx')
 persons_df = pd.read_excel('../Data/2014-pr3-hhsurvey-persons.xlsx')
 trips_df = pd.read_excel('../Data/2014-pr3-hhsurvey-trips.xlsx')
@@ -190,7 +191,6 @@ used_zips = ['98101', '98102', '98103', '98104', '98105', '98106', '98107',
              '98144', '98146', '98177', '98178', '98195', '98199']
 
 # Start Bokeh Plotting
-
 # Assign grid from Seattle zips shapefile
 grid_fp = r"../Data/zips_sea/shp.shp"
 
@@ -325,8 +325,7 @@ checkbox_psrc.callback = CustomJS(args=dict(l0=trip0, l1=trip1, l2=trip2,
 para_psrc = Paragraph(text="""Network Map of Seattle Travel. For each zipcode,
 a line from the selected zipcode conects to the most frequent destination
 zipcodes. A dot representsthat the most frequent trips were within
-the same zipcode.""",
-                      width=200, height=100)
+the same zipcode.""", width=200, height=100)
 
 # Seattle Transit Mapping
 # Creating routes list to store bus numbers for each zip code
@@ -524,7 +523,6 @@ r27 = p.multi_line('xs', 'ys', source=ns27, color=col, line_width=wd)
 r28 = p.multi_line('xs', 'ys', source=ns28, color=col, line_width=wd)
 r29 = p.multi_line('xs', 'ys', source=ns29, color=col, line_width=wd)
 
-
 # Defining hover tool
 ghover = HoverTool(renderers=[grid2])
 ghover.tooltips = [("zip code", "@GEOID10")]
@@ -630,6 +628,7 @@ callback = CustomJS(args={'source1': age_plot_data, 'source2': age_data_CDS,
     """)
 # This is bokeh code to get the zipcode from the selection menu in the plot
 select.js_on_change('value', callback)
+
 # This is a widget to give a overview description to the HTML
 description = Div(text="""This is <b>Transit Trackers!</b> Your interactive map
 for Seattle transit trends and socioeconomic data. Customize these
@@ -640,11 +639,13 @@ toolbar for the Map.""", width=600, height=100)
 para_soc = Paragraph(text="""These graphs show the age and education
 distribution for the zipcode selected in the dropdown menu""", width=200,
                      height=100)
+
 # This is bokeh code to define the plots layout for the final HTML
 layout = gridplot([widgetbox(description)],
                   [widgetbox(para_routes), p, widgetbox(checkbox)],
                   [widgetbox(para_psrc), p_psrc, widgetbox(checkbox_psrc)],
                   [age_plot, edu_plot, widgetbox(select, para_soc)])
+
 # THis saves the output HTML to the examples folder, opens the HTML and names
 # the HTML
 outfp = r"../examples/transit_trackers.html"
