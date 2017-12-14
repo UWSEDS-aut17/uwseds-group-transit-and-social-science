@@ -51,6 +51,7 @@ class plotting_test(unittest.TestCase):
         item = soup.findAll("div")
         self.assertTrue(item[0]['class'], ['bk-root'])
         self.assertTrue(item[1]['class'], ['bk-plotdiv'])
+        f.close()
         os.remove("transit_trackers_ex.html")
 		
         
