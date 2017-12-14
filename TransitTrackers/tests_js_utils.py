@@ -6,7 +6,7 @@ x = r"../Data/zips_sea/shp.shp"
 grid = gpd.read_file(x)
 
 
-class Data_test(unittest.TestCase):
+class js_test(unittest.TestCase):
 
     def test_js_code(self):
         # Test for java script code generator function
