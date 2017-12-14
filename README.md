@@ -9,7 +9,8 @@ travel modes and trends of Seattle residents. Data can be found here:
 
 https://www.psrc.org/household-travel-survey-program
 
-The user runs the analysis by typing in the command line:
+The user will download or clone our repo off of github, and can run the
+analysis by typing in the command line:
 
 "python transit_tracker.py"
 
